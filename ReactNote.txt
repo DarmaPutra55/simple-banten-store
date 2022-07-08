@@ -1,0 +1,32 @@
++Parameter that get passed into useState() is used as initial value of the state.
+Example: const [number, setNumber] = useState("1"); => This will make it so that number's initial value is 1.
+
++To set inline style, use style={{attribute: "<value>"}}
+
++To create a responisve col in container, use breakpoint on each col.
+Example:
+<Row>
+   <Col xs = {{order:"last"}} md={{span: 8, order:"last"}} lg={{span: "auto", order: "first"}}>Hahahaha</Col> // Make sure to give value to each breakpoint, example on xs and md order is set to "Last" to move the colum to the last area but in lg the order is set to first to prevent md and xs order being used despite of still in large screen.
+   <Col md={4} lg={"auto"}>Yahooo</Col>
+   <Col md={4} lg={"auto"}>ORAORAORAORA</Col>
+</Row>
+
++Use array join to split all array into string. You can enter customized seperator by giving join an parameter.
+Example:
+//array j has [noita, gundam, gumblar] as value.
+const text = j.join(", "); => text will contain string noita, gundam, gumblar.
+
++To get value from a Form, use useState() and do this:
+<form onSubmit={ e => {submit(e)}}>
+  <Form.Control 
+	type="text" 
+	placeholder="Enter pokemon ability... (ex: Stench)" 
+	value={pokesearch} //get the value of the first useState object.
+	onChange={(e)=>{setPokesearch(pokesearch = e.target.value)}}> //use onChange() to store the value to first useState object using useState setter to store input value;
+   </Form.Control>
+</form>
+
++JSX does not accept for, instead you can make empty array and then use fill to fill it with nothing. Then loop throught it using map with (_, i) as parameter. Also don't forget to assign key to each object.
++In array map, you can use _ to give empty parameter
+
+Example: {Array(5).fill(' ').map((_, i)=>{return <Item key={i} />}) // (_, i) mean we will take i as index of each array and _ mean empty. key={i} mean we use the array index as key for our object.
