@@ -4,8 +4,10 @@ export default function Icon(props){
     return(
         <Center>
              <IconButton 
+                fill={props.fill || ""}
+                color={props.color || ""}
                 size={props.size || "md"}
-                bgColor={props.color || "transparent"}
+                bgColor={props.bgColor || "transparent"}
                 border={props.border || "none"}
                 aria-label={props.label} 
                 icon={props.icon} 

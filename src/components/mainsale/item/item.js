@@ -2,22 +2,12 @@ import { Box, Image, Text, Heading, Stack, Flex, Icon } from "@chakra-ui/react";
 import { Star } from "react-feather";
 
 
-export default function Item(){
-
-    const props = {
-        img: "https://bit.ly/2Z4KKcF",
-        name: "Teh Celub Sosro - MMI - 91",
-        price: "Rp 25rb",
-        originalPrice: "Rp 32rb",
-        discount: "-50%",
-        rating: "4.7",
-        sold: "140"
-    }
+export default function Item(props){
 
     return(
         <Box 
             m={1}
-            maxW={["48vw", "300px"]} 
+            maxW={["46vw", "46vw", "350px"]} 
             border={"1px"} 
             borderColor={"gray.100"}
         >
