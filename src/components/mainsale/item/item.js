@@ -1,4 +1,4 @@
-import { Box, Image, Text, Heading, Stack, Flex, Icon } from "@chakra-ui/react";
+import { Box, Image, Text, Heading, Stack, Flex, Icon, AspectRatio } from "@chakra-ui/react";
 import { Star } from "react-feather";
 
 
@@ -7,14 +7,19 @@ export default function Item(props){
     return(
         <Box 
             m={1}
-            maxW={["46vw", "46vw", "350px"]} 
+            maxW={["46%", "46%", "350px"]} 
+            minW={["46%", "46%","100px"]}
             border={"1px"} 
             borderColor={"gray.100"}
         >
-            <Image 
-                src= {props.img}
-                alt="Estate" 
-            />
+            <AspectRatio
+                ratio={1}
+            >
+                <Image 
+                    src= {props.img}
+                    alt="Estate" 
+                />
+            </AspectRatio>
 
             <Stack 
                 p={"1.5"} 
@@ -31,15 +36,12 @@ export default function Item(props){
                 <Heading
                     as={"h2"}
                     size={"md"} 
-                    textColor={()=>{
-                        if(props.originalPrice === ""){
-                            return "black" 
-                        }
-                        return "orange.400"
-                    }}
+                    textColor={
+                        !props.originalPrice ? "black" : "orange.400"
+                    }
                 >
 
-                    {props.price}
+                    ${props.price}
                 
                 </Heading>
                 

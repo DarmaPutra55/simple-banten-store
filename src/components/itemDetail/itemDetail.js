@@ -1,46 +1,57 @@
-import { Stack} from "@chakra-ui/react";
-import { useState } from "react";
+import { Stack, Flex } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import Loading from "../smallcomponent/loading/loading";
 import ItemDetailHeader from "./itemDetailHeader/itemDetailHeader";
 import ItemDetailInformation from "./itemDetailInformation/itemDetailInformation";
-import ItemDetailSpecification from "./itemDetailSpecification/itemDetailSpecification";
 
 export default function ItemDetail(){
+    const itemID= 3;
+    const [itemDetail, setItemDetail] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    const props = {
-        img: "https://bit.ly/2Z4KKcF",
-        name: "Teh Celub Sosro - MMI - 91",
-        price: "Rp 25.000",
-        originalPrice: "Rp 32.000",
-        discount: "50%",
-        rating: "4.7",
-        ulasan: "25",
-        sold: "140",
-        kategori: "Banten",
-        berat: "1kg",
-        asal: "Rumah",
-        stock: "49",
-        fav: true
+    const getItem = async () =>{
+        const response = await fetch("https://fakestoreapi.com/products/"+itemID);
+        const result = await response.json();
+        return result;
     }
 
+    const setFetchedItem = async () =>{
+        setItemDetail(await getItem());
+        setLoading(false);
+    }
+
+    useEffect(()=>{
+        setFetchedItem();
+    }, [])
+
     return(
-        <Stack minH={"100vh"} backgroundColor={"gray.100"} spacing={"18px"} >
-            <ItemDetailHeader 
-                img={props.img} 
-                name={props.name} 
-                rating={props.rating} 
-                price={props.price} 
-                originalPrice={props.originalPrice} 
-                discount={props.discount} 
-                ulasan={props.ulasan} 
-            />
+        <>
+            {
+                loading? 
 
-            <ItemDetailInformation
-                kategori={props.kategori}
-                stock={props.stock}
-                sold={props.sold}
-            />
+                    <Loading />
 
-            
-        </Stack>     
+                :
+
+                    <Stack minH={"100vh"} backgroundColor={"gray.100"} spacing={"18px"}>
+                        <ItemDetailHeader 
+                            img={itemDetail.image} 
+                            name={itemDetail.title} 
+                            rating={itemDetail.rating.rate} 
+                            price={itemDetail.price} 
+                            originalPrice={itemDetail.originalPrice} 
+                            discount={itemDetail.discount} 
+                            ulasan={itemDetail.rating.count} 
+                        />
+
+                        <ItemDetailInformation
+                            kategori={itemDetail.category}
+                            stock={20}
+                            sold={6}
+                            description={itemDetail.description}
+                        />
+                    </Stack>
+            }  
+        </>
     );
 }

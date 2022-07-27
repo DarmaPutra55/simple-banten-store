@@ -10,7 +10,17 @@ export default function SearchBar(props) {
     //Provide the submitEvent props to handle what will happen when user press enter.
 
     return(
-        <Flex p={2} justify={"space-between"} shadow={"sm"} position={"sticky"} top={"0"} left={"0"} bgColor={"white"}>
+        <Flex 
+            p={2}
+            minW={"100vw"} 
+            justify={"space-between"} 
+            shadow={"sm"} 
+            position={"sticky"} 
+            top={"0"} 
+            left={"0"} 
+            bgColor={"white"} 
+            zIndex={"100"}
+        >
             <Heading as={"h1"} fontSize={"1.1em"} pr={2} alignSelf={"center"}>
                 D-Lapak
             </Heading>

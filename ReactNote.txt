@@ -30,3 +30,38 @@ const text = j.join(", "); => text will contain string noita, gundam, gumblar.
 +In array map, you can use _ to give empty parameter
 
 Example: {Array(5).fill(' ').map((_, i)=>{return <Item key={i} />}) // (_, i) mean we will take i as index of each array and _ mean empty. key={i} mean we use the array index as key for our object.
+
+
++Use useRef() if you want to access height/width of an element, more info in here https://thewebdev.info/2021/09/18/how-to-get-the-height-of-an-element-with-react/
+
++In page where you had to fetch first before rendering start, make an 'loading' use state and set it to true. Change the state of 'loading' into false after finished fetching. In JSX, create an conditional rendering where web will render 'Loading' component when loading is set to true and render the true web when 'loading' state set to false.
+
+Example:
+
+const [loading, setLoading] = useState(true);
+
+const fetchSomething = () => {
+	const response = await fetch("some-API-here");
+	//blahblahblah
+	setLoading(false)
+}
+
+useEffect(()=>{
+	fetchSomething();
+},[]);
+
+return(
+        <Stack minH={"100vh"} backgroundColor={"gray.100"} spacing={"18px"} >
+        {
+            loading? 
+
+            <Spinner pos={"absolute"} top={"50%"} left={"50%"} size={"xl"} /> //Placeholder element to show when busy loading.
+
+            :
+
+            <>
+                //True element here.
+            </>
+        }   
+        </Stack>     
+);

@@ -1,4 +1,4 @@
-import { Box, Badge, Image, Stack, Icon, Flex, Text, Heading } from "@chakra-ui/react"
+import { Box, Badge, Image, Stack, Icon, Flex, Text, Heading, AspectRatio } from "@chakra-ui/react"
 import { useState } from "react";
 import { Star, Heart } from "react-feather";
 import ActionIcon from "../../smallcomponent/icons/icon";
@@ -29,32 +29,44 @@ export default function ItemDetailHeader(props){
 
     return(
         <Box backgroundColor={"white"} overflowY={"hidden"}>
-                <Image
-                    src={props.img}
-                />
-                <Stack p={"2"} spacing={"1"}>
+                <AspectRatio
+                    ratio={1}
+                    //maxH={"60vh"}
+                    maxW={["100%", "400px", "400px"]}
+                >
+                    <Image
+                        src={props.img}
+                    />
+                </AspectRatio>
+                <Stack p={"2"} spacing={"4px"}>
                     <Box>
-                        <Text fontWeight={"semibold"}>{props.price}</Text>
-                        <Stack direction={"row"}>
-                            <Text as='s' color={"gray.400"}>{props.originalPrice}</Text>
-                            <Badge
-                                p={"1"}
-                                alignSelf={"center"}
-                                backgroundColor={"red"}
-                                textColor={"white"}
-                                fontWeight={"bold"}
-                            >{props.discount}</Badge>
-                        </Stack>
+                        <Text fontWeight={"semibold"}>${props.price}</Text>
+                        {props.discount?
+                            (
+                                <Stack direction={"row"}>
+                                    <Text as='s' color={"gray.400"}>${props.originalPrice}</Text>
+                                    <Badge
+                                        alignSelf={"center"}
+                                        backgroundColor={"red"}
+                                        textColor={"white"}
+                                        fontWeight={"bold"}
+                                    >{props.discount}
+                                    </Badge>
+                                </Stack>
+                            )
+                            : ''
+                        }
+                        
                     </Box>
                     <Heading size={"md"}>
                         {props.name}
                     </Heading>
                         <Flex justify={"space-between"}>
-                            <Stack direction={"row"}>
-                                <Stack direction={"row"} py={"1"} spacing={"0.5"}>
+                            <Stack direction={"row"} alignItems={"center"}>
+                                <Stack direction={"row"} py={"1"} spacing={"0.5"} height={"fit-content"}>
                                     {RenderStarRating()}
                                 </Stack>
-                                <Text color={"gray.400"}>
+                                <Text color={"gray.400"} height={"fit-content"}>
                                     {props.ulasan} Ulasan
                                 </Text>
                             </Stack>
