@@ -1,3 +1,7 @@
+# Simple Banten Store
+
+Aplikasi penjualan banten/sarana upacara hindu online yang dibuat dengan react dan chakra-ui (Saat ini hanya untuk mobile).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
