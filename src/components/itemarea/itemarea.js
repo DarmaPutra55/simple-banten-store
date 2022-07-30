@@ -1,6 +1,6 @@
 import { Flex, useBoolean } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Loading from "../../smallcomponent/loading/loading";
+import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
 
 export default function ItemArea(props) {
@@ -21,7 +21,7 @@ export default function ItemArea(props) {
             
             fetchedItems.forEach(element => {
                 if(element.title.toLowerCase().includes(props.searchParams)){
-                    temp_items.push({
+                    const item = {
                         "id": element.id,
                         "img": element.image,
                         "price": element.price,
@@ -29,7 +29,8 @@ export default function ItemArea(props) {
                         "name": element.title,
                         "rating": element.rating.rate,
                         "sold": 130
-                    })
+                    };
+                    temp_items.push(item)
                 }
 
                 setItems(temp_items);
@@ -57,11 +58,13 @@ export default function ItemArea(props) {
                     
                     <Flex
                         flexWrap={"wrap"}
+                        justify={["baseline", "baseline", "center"]}
                     >
                         {
                             Array(items.length).fill('').map((_, i)=>{
                                 return <Item 
-                                            key={items[i].id} 
+                                            key={i} 
+                                            id={items[i].id}
                                             img={items[i].img} 
                                             name={items[i].name} 
                                             price={items[i].price} 

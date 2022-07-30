@@ -1,7 +1,9 @@
 +Parameter that get passed into useState() is used as initial value of the state.
 Example: const [number, setNumber] = useState("1"); => This will make it so that number's initial value is 1.
 
+
 +To set inline style, use style={{attribute: "<value>"}}
+
 
 +To create a responisve col in container, use breakpoint on each col.
 Example:
@@ -11,10 +13,12 @@ Example:
    <Col md={4} lg={"auto"}>ORAORAORAORA</Col>
 </Row>
 
+
 +Use array join to split all array into string. You can enter customized seperator by giving join an parameter.
 Example:
 //array j has [noita, gundam, gumblar] as value.
 const text = j.join(", "); => text will contain string noita, gundam, gumblar.
+
 
 +To get value from a Form, use useState() and do this:
 <form onSubmit={ e => {submit(e)}}>
@@ -35,7 +39,6 @@ Example: {Array(5).fill(' ').map((_, i)=>{return <Item key={i} />}) // (_, i) me
 +Use useRef() if you want to access height/width of an element, more info in here https://thewebdev.info/2021/09/18/how-to-get-the-height-of-an-element-with-react/
 
 +In page where you had to fetch first before rendering start, make an 'loading' use state and set it to true. Change the state of 'loading' into false after finished fetching. In JSX, create an conditional rendering where web will render 'Loading' component when loading is set to true and render the true web when 'loading' state set to false.
-
 Example:
 
 const [loading, setLoading] = useState(true);
@@ -65,3 +68,8 @@ return(
         }   
         </Stack>     
 );
+
+
++Async is weird in React, moreso when dealing with array. Avoid using two useEffect that rely on 1 array, or rely on another array in diffrent useEffect. If possible, make it so that all async function that rely on each other is grouped into one high level async function.
+Example:
+setAnimals([...animals, { type: "Sparrow" }]) //This will add new element to array Animals

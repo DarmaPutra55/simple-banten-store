@@ -1,7 +1,7 @@
-import SearchBar from "./searchbar/searchbar";
-import ItemArea from "./itemarea/itemarea";
+import SearchBar from "../components/searchbar/searchbar";
+import ItemArea from "../components/itemarea/itemarea";
 import { Stack } from "@chakra-ui/react";
-import useSearchItems from "./itemarea/itemareahooks";
+import useSearchItems from "../components/itemarea/itemareahooks";
 import { useEffect } from "react";
 
 export default function MainSale(){

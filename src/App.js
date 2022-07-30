@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import MainSale from "./components/mainsale/mainsale";
-import ItemDetail from "./components/itemDetail/itemDetail";
+import MainSale from "./pages/mainsale";
+import ItemDetail from "./pages/itemDetail"
 import { ChakraProvider, Flex } from '@chakra-ui/react'
+import { Route, Routes } from "react-router-dom";
 
 function App() {
 
@@ -11,7 +12,10 @@ function App() {
         minH={"100vh"} 
         minW={"100vw"}
       >
-        <MainSale />
+        <Routes>
+          <Route path='/' element={<MainSale />} />
+          <Route path='/item/:itemID' element={<ItemDetail />} />
+        </Routes>
       </Flex>
     </ChakraProvider>
   );

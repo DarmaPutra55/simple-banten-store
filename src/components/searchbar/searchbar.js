@@ -1,5 +1,5 @@
 import { Flex, Heading, Input, InputGroup, InputLeftElement, Box} from '@chakra-ui/react'
-import Icon from '../../smallcomponent/icons/icon';
+import Icon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search } from "react-feather";
 import { useState } from 'react';
