@@ -3,9 +3,12 @@ import Icon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search } from "react-feather";
 import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function SearchBar(props) {
     const [searchText, setSearchText] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
 
@@ -27,7 +30,7 @@ export default function SearchBar(props) {
             <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
                 <form onSubmit={(e)=>{
                     e.preventDefault();
-                    props.setSearchParams(searchText);
+                    navigate(searchText ? "/?itemName="+searchText : "/", {replace:true});
                 }}>
                     <InputGroup pr={2}>
                         <InputLeftElement 
@@ -36,7 +39,7 @@ export default function SearchBar(props) {
                                 <Search color='grey' size={20}/>
                             } 
                         />
-                            <Input variant={'outline'} placeholder='Masukan nama barang...' onChange={(e)=>{setSearchText(e.target.value)}}/>
+                            <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e)=>{setSearchText(e.target.value)}}/>
                     </InputGroup>
                 </form>
             </Box>

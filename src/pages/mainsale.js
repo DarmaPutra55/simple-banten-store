@@ -1,15 +1,17 @@
 import SearchBar from "../components/searchbar/searchbar";
 import ItemArea from "../components/itemarea/itemarea";
 import { Stack } from "@chakra-ui/react";
-import useSearchItems from "../components/itemarea/itemareahooks";
-import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function MainSale(){
-    const [searchParams, setSearchParams] = useSearchItems();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const getParams = () => {
+        return searchParams.get("itemName") ? searchParams.get("itemName").toLowerCase() : "";
+    }
     return(
         <Stack>
-            <SearchBar setSearchParams={(text)=>{setSearchParams(text)}} />
-            <ItemArea searchParams = {searchParams.toLowerCase()}/>
+            <SearchBar />
+            <ItemArea searchParams = { getParams() }/>
         </Stack>
     );
 }

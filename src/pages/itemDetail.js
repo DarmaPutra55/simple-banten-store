@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import Loading from "../components/smallcomponent/loading/loading";
 import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDetailHeader";
 import ItemDetailInformation from "../components/itemDetail/itemDetailInformation/itemDetailInformation";
+import SearchBar from "../components/searchbar/searchbar";
+import { Box } from "react-feather";
 
 export default function ItemDetail(){
     const params = useParams();
@@ -33,7 +35,8 @@ export default function ItemDetail(){
                     <Loading />
 
                 :
-                    <>
+                    <Stack>
+                        <SearchBar />
                         <Stack minH={"100vh"} backgroundColor={"gray.100"} spacing={"18px"}>
                             <ItemDetailHeader 
                                 img={itemDetail.image} 
@@ -52,7 +55,7 @@ export default function ItemDetail(){
                                 description={itemDetail.description}
                             />
                         </Stack>
-                    </>
+                    </Stack>
             }  
         </>
     );
