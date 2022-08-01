@@ -11,7 +11,7 @@ export default function MainSale(){
         if(searchParams.has("itemName")) searchParamsMap.set("itemName", searchParams.get("itemName").toLowerCase());
         if(searchParams.has("itemCategory")) searchParamsMap.set("itemCategory", searchParams.get("itemCategory").toLowerCase());
 
-        return searchParamsMap.size > 0 ? searchParamsMap : "";
+        return searchParamsMap;
     }
     return(
         <Stack>
