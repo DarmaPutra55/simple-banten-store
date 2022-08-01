@@ -14,7 +14,7 @@ function App() {
       >
         <Routes>
           <Route path='/' element={<MainSale />} />
-          <Route path='/item/:itemID' element={<ItemDetail />} />
+          <Route path='/item/:itemID' element={<ItemDetail />}  />
         </Routes>
       </Flex>
     </ChakraProvider>

@@ -6,7 +6,12 @@ import { useSearchParams } from "react-router-dom";
 export default function MainSale(){
     const [searchParams, setSearchParams] = useSearchParams();
     const getParams = () => {
-        return searchParams.get("itemName") ? searchParams.get("itemName").toLowerCase() : "";
+        let searchParamsMap = new Map();
+
+        if(searchParams.has("itemName")) searchParamsMap.set("itemName", searchParams.get("itemName").toLowerCase());
+        if(searchParams.has("itemCategory")) searchParamsMap.set("itemCategory", searchParams.get("itemCategory").toLowerCase());
+
+        return searchParamsMap.size > 0 ? searchParamsMap : "";
     }
     return(
         <Stack>

@@ -9,12 +9,16 @@ export default function Item(props){
             <Box 
                 m={1}
                 flex={"1 1"}
-                flexBasis={["48%", "48%", "350px"]}
-                maxW={["48%", "48%", "350px"]}
+                flexBasis={["47.5%", "47.5%", "350px"]}
+                maxW={["47.5%", "47.5%", "350px"]}
                 border={"1px"} 
                 borderColor={"gray.100"}
             >
-                <Link as={ReactLink} to={"/item/"+props.id}>
+                <Link 
+                    as={ReactLink} 
+                    to={"/item/"+props.id}
+                    reloadDocument
+                >
                     <AspectRatio
                         ratio={1}
                     >

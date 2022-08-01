@@ -13,6 +13,12 @@ export default function ItemArea(props) {
         return result;
     }
 
+    const itemValidator = (element) => {
+        if(props.searchParams.has("itemCategory") && element.category.toLowerCase() !== props.searchParams.get("itemCategory")) return false;
+        if(props.searchParams.has("itemName") && !element.title.toLowerCase().includes(props.searchParams.get("itemName"))) return false;
+        return true;
+    }
+
     const searchItems = async () => {
         try{
             setIsLoading.toggle();
@@ -20,7 +26,7 @@ export default function ItemArea(props) {
             const temp_items = []
             
             fetchedItems.forEach(element => {
-                if(element.title.toLowerCase().includes(props.searchParams)){
+                if(itemValidator(element)){
                     const item = {
                         "id": element.id,
                         "img": element.image,

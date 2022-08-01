@@ -1,7 +1,7 @@
 import { Flex, Heading, Input, InputGroup, InputLeftElement, Box} from '@chakra-ui/react'
 import Icon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
-import { ShoppingCart, Search } from "react-feather";
+import { ShoppingCart, Search, User } from "react-feather";
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ export default function SearchBar(props) {
 
     return(
         <Flex 
-            p={2}
+            p={"2px"}
             minW={"100vw"} 
             justify={"space-between"} 
             shadow={"sm"} 
@@ -48,6 +48,13 @@ export default function SearchBar(props) {
                 label={"Shopping chart"}
                 icon={<ShoppingCart />}
                 onClick={()=>{console.log("Chart")}}
+            />
+
+            <Icon 
+                size={"sm"}
+                label={"User"}
+                icon={<User />}
+                onClick={()=>{console.log("User")}}
             />
        </Flex>
     );
