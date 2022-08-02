@@ -1,9 +1,9 @@
-import { Flex, Heading, Input, InputGroup, InputLeftElement, Box} from '@chakra-ui/react'
-import Icon from '../smallcomponent/icons/icon';
+import { Flex, Heading, Input, InputGroup, InputLeftElement, Box, Link} from '@chakra-ui/react'
+import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search, User } from "react-feather";
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link as ReactLink } from 'react-router-dom';
 
 export default function SearchBar(props) {
     const [searchText, setSearchText] = useState("");
@@ -14,7 +14,7 @@ export default function SearchBar(props) {
 
     return(
         <Flex 
-            p={"2px"}
+            p={"10px"}
             minW={"100vw"} 
             justify={"space-between"} 
             shadow={"sm"} 
@@ -24,9 +24,25 @@ export default function SearchBar(props) {
             bgColor={"white"} 
             zIndex={"100"}
         >
-            <Heading as={"h1"} fontSize={"1.1em"} pr={2} alignSelf={"center"}>
-                D-Lapak
-            </Heading>
+            <Link 
+                as={ReactLink}
+                to={"/"} 
+                h={"100%"}
+            >
+                <Flex
+                    h={"100%"}
+                    align={"center"}
+                    justify={"center"}
+                >
+                    <Heading 
+                        as={"h1"} 
+                        fontSize={"1.1em"} 
+                        pr={2} 
+                    >
+                        BanStore
+                    </Heading> 
+                </Flex>
+            </Link>
             <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
                 <form onSubmit={(e)=>{
                     e.preventDefault();
@@ -43,14 +59,14 @@ export default function SearchBar(props) {
                     </InputGroup>
                 </form>
             </Box>
-            <Icon 
+            <ActionIcon 
                 size={"sm"}
                 label={"Shopping chart"}
                 icon={<ShoppingCart />}
                 onClick={()=>{console.log("Chart")}}
             />
 
-            <Icon 
+            <ActionIcon 
                 size={"sm"}
                 label={"User"}
                 icon={<User />}

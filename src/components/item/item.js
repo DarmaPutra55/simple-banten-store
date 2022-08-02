@@ -1,6 +1,7 @@
 import { Box, Image, Text, Heading, Stack, Flex, Icon, AspectRatio, Link } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 import { Star } from "react-feather";
+import '../../style/chakra-util.css';
 
 
 export default function Item(props){
@@ -19,14 +20,14 @@ export default function Item(props){
                     to={"/item/"+props.id}
                     reloadDocument
                 >
-                    <AspectRatio
-                        ratio={1}
-                    >
-                        <Image 
-                            src= {props.img}
-                            alt="Estate" 
-                        />
-                    </AspectRatio>
+
+                    <Image
+                        className="ratioSame"
+                        w={"100%"}
+                        fit={"contain"}
+                        src= {props.img}
+                        alt="Estate" 
+                    />
 
                     <Stack 
                         p={"1.5"} 

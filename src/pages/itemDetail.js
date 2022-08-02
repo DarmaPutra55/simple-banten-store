@@ -34,7 +34,12 @@ export default function ItemDetail(){
                         { loading ?
                             <Loading />
                             :
-                            <Stack minH={"100vh"} backgroundColor={"gray.100"} spacing={"18px"} maxW={"100vw"}>
+                            <Stack 
+                                minH={"100vh"} 
+                                backgroundColor={"gray.100"} 
+                                spacing={"18px"} 
+                                maxW={"100vw"}
+                            >
                                 <ItemDetailHeader 
                                     img={itemDetail.image} 
                                     name={itemDetail.title} 
@@ -52,7 +57,9 @@ export default function ItemDetail(){
                                     description={itemDetail.description}
                                 />
 
-                                <ItemMoreLikeThis category={itemDetail.category} />
+                                <ItemMoreLikeThis 
+                                    category={itemDetail.category} 
+                                />
                             </Stack>
                         }
                     </Stack>

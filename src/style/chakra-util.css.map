@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,UAAU,CAAC;EACP,YAAY,EAAE,CAAC;CAClB",
+    "sources": [
+        "chakra-util.scss"
+    ],
+    "names": [],
+    "file": "chakra-util.css"
+}

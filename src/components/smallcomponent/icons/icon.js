@@ -4,6 +4,7 @@ export default function ActionIcon(props){
     return(
         <Center>
              <IconButton 
+                _hover={{"bgColor": "transparent"}}
                 _active={{"bgColor": "transparent"}}
                 _focus={{"bgColor":"transparent"}}
                 fill={props.fill}

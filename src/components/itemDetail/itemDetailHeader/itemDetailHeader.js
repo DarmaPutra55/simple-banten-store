@@ -29,15 +29,14 @@ export default function ItemDetailHeader(props){
 
     return(
         <Box backgroundColor={"white"} overflowY={"hidden"}>
-                <AspectRatio
-                    ratio={1}
-                    //maxH={"60vh"}
+                <Image
+                    fit={"contain"}
                     maxW={["100%", "400px", "400px"]}
-                >
-                    <Image
-                        src={props.img}
-                    />
-                </AspectRatio>
+                    maxH={["100%", "400px", "400px"]}
+                    w={"100vw"}
+                    h={"100vw"}
+                    src={props.img}
+                />
                 <Stack p={"2"} spacing={"4px"}>
                     <Box>
                         <Text fontWeight={"semibold"}>${props.price}</Text>
