@@ -2,6 +2,8 @@ import { Stack, Flex, Checkbox, Heading, Text, HStack, InputGroup, InputLeftAddo
 import { Link as RouterLink } from 'react-router-dom';
 import ActionIcon from "../../components/smallcomponent/icons/icon";
 import { Plus, Minus, Trash } from "react-feather";
+import { useItemQunatity } from "./chartItemQuantityManager/itemQuantityHooks";
+import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
 
 export default function ChartItem(){
     const props = {
@@ -12,6 +14,8 @@ export default function ChartItem(){
         itemStock: 4,
         itemImg: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
     }
+
+    const [itemBought, setItemBought] = useItemQunatity(props.itemQuantity, props.itemStock);
 
     return(
         <Stack
@@ -46,41 +50,16 @@ export default function ChartItem(){
                             as={"h2"}
                             fontSize={"md"}
                         >
-                            ${props.itemPrice}
+                            ${props.itemPrice * itemBought}
                         </Heading>
                     </Stack>
                     <HStack
                         spacing={"15px"}
                     >
-                        <InputGroup
-                            w={"fit-content"}
-                        >
-                            <InputLeftAddon
-                                px={"0"}
-                            >
-                                <ActionIcon
-                                    size={"sm"}
-                                    label={"Item Plus"}
-                                    icon={<Plus />}
-                                    onClick={()=>{console.log("Plus")}}
-                                />
-                            </InputLeftAddon>
-                            <Input
-                                maxW={['15vw', "15w", "100px"]}
-                                defaultValue={props.itemQuantity}
-                                textAlign={"center"}
-                            />
-                            <InputRightAddon
-                                px={"0"}
-                            >
-                                <ActionIcon
-                                    size={"sm"}
-                                    label={"Item Minus"}
-                                    icon={<Minus />}
-                                    onClick={()=>{console.log("Minus")}}
-                                />
-                            </InputRightAddon>
-                        </InputGroup>
+                        <ChartItemQuantitiyManager 
+                            itemQuantity={itemBought}
+                            setItemQuantity={setItemBought}
+                        />
                         <Text
                             fontSize={"sm"}
                             color={"red.400"}

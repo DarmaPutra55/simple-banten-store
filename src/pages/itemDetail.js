@@ -6,12 +6,11 @@ import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDeta
 import ItemDetailInformation from "../components/itemDetail/itemDetailInformation/itemDetailInformation";
 import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
 import SearchBar from "../components/searchbar/searchbar";
-import { Box } from "react-feather";
 
 export default function ItemDetail(){
     const params = useParams();
     const [itemDetail, setItemDetail] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const getItem = async () =>{
         const response = await fetch("https://fakestoreapi.com/products/"+params.itemID);
@@ -20,8 +19,16 @@ export default function ItemDetail(){
     }
 
     const setFetchedItem = async () =>{
-        setItemDetail(await getItem());
-        setLoading(false);
+        try{
+            setLoading(true);
+            setItemDetail(await getItem());
+        }
+        catch(err){
+            console.log(err);
+        }
+        finally{
+            setLoading(false);
+        }
     }
 
     useEffect(()=>{
