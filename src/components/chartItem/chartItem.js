@@ -5,16 +5,7 @@ import { Plus, Minus, Trash } from "react-feather";
 import { useItemQunatity } from "./chartItemQuantityManager/itemQuantityHooks";
 import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
 
-export default function ChartItem(){
-    const props = {
-        itemID: 1,
-        itemName: "Bibit Bunga Matahari",
-        itemPrice: 300,
-        itemQuantity: 2,
-        itemStock: 4,
-        itemImg: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-    }
-
+export default function ChartItem({props}){
     const [itemBought, setItemBought] = useItemQunatity(props.itemQuantity, props.itemStock);
 
     return(
