@@ -34,7 +34,6 @@ export default function ChartItemQuantitiyManager({itemQuantity, setItemQuantity
                 minW={'50px'}
                 maxW={'50px'}
                 value={itemQuantity}
-                defaultValue={1}
                 textAlign={"center"}
                 onChange={inputChangeHandler}
             />

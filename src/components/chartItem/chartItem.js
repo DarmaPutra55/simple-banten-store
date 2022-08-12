@@ -1,12 +1,30 @@
-import { Stack, Flex, Checkbox, Heading, Text, HStack, InputGroup, InputLeftAddon, InputRightAddon, Input, Link, Image } from '@chakra-ui/react'
+import { Stack, Flex, Checkbox, Heading, Text, HStack, Link, Image } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom';
 import ActionIcon from "../../components/smallcomponent/icons/icon";
-import { Plus, Minus, Trash } from "react-feather";
+import { Trash } from "react-feather";
 import { useItemQunatity } from "./chartItemQuantityManager/itemQuantityHooks";
 import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
+import { useContext, useEffect, useState } from 'react';
+import { ChartContext } from '../context/chartContext';
 
-export default function ChartItem({props}){
-    const [itemBought, setItemBought] = useItemQunatity(props.itemQuantity, props.itemStock);
+export default function ChartItem({chartID, itemID, itemImg, itemName, itemQuantity, itemPrice, itemStock}){
+    const [itemBought, setItemBought] = useItemQunatity(itemQuantity, itemStock);
+    const [itemChecked, setItemChecked] = useState(true);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const {changeChartItemQuantity, itemCheckHandler} = useContext(ChartContext);
+
+    const checkClickHandler = () =>{
+        setItemChecked(!itemChecked);
+    }
+    
+    useEffect(()=>{
+        setTotalPrice(itemPrice * itemBought);
+        changeChartItemQuantity(chartID, itemBought);
+    }, [itemBought])
+
+    useEffect(()=>{
+        itemCheckHandler(chartID, itemChecked)
+    }, [itemChecked])
 
     return(
         <Stack
@@ -22,7 +40,8 @@ export default function ChartItem({props}){
                     h={"65%"}
                 >
                     <Checkbox 
-                        defaultChecked
+                        isChecked={itemChecked}
+                        onChange={checkClickHandler}
                     />
                 </Flex>
                 <Stack
@@ -35,13 +54,13 @@ export default function ChartItem({props}){
                         <Text
                             fontSize={"sm"}
                         >
-                            {props.itemName}
+                            {itemName}
                         </Text>
                         <Heading 
                             as={"h2"}
                             fontSize={"md"}
                         >
-                            ${props.itemPrice * itemBought}
+                            ${totalPrice}
                         </Heading>
                     </Stack>
                     <HStack
@@ -55,7 +74,7 @@ export default function ChartItem({props}){
                             fontSize={"sm"}
                             color={"red.400"}
                         >
-                            Stok tinggal {props.itemStock}
+                            Stok tinggal {itemStock}
                         </Text>
                     </HStack>
                 </Stack>
@@ -65,7 +84,7 @@ export default function ChartItem({props}){
                 >
                     <Link
                         as={RouterLink}
-                        to={"/item/"+props.itemID}
+                        to={"/item/"+itemID}
                     >
                         <Flex
                             align={"center"}
@@ -75,7 +94,7 @@ export default function ChartItem({props}){
                                 fit={"contain"}
                                 w={"80px"}
                                 h={"80px"}
-                                src={props.itemImg}
+                                src={itemImg}
                                 alt={"Sorry"}
                             />
                         </Flex>

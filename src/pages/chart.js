@@ -1,50 +1,22 @@
-import { Flex, Heading, Stack, Box, Text, Button, useBoolean  } from "@chakra-ui/react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { Flex, Heading, Stack, Box, Text, Button  } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
 import SearchBar from "../components/searchbar/searchbar";
 import ChartItem from "../components/chartItem/chartItem";
 import Loading from "../components/smallcomponent/loading/loading"
+import { ChartContext } from "../components/context/chartContext";
 
-const fItems = [
-    {
-        itemID: 1,
-        itemName: "Bibit Bunga Matahari",
-        itemPrice: 300,
-        itemQuantity: 2,
-        itemStock: 4,
-        itemImg: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-    }, 
-    {   itemID: 1,
-        itemName: "Bibit Bunga Matahari",
-        itemPrice: 400,
-        itemQuantity: 2,
-        itemStock: 4,
-        itemImg: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-    }
-]
-
-const getTotalPrice = (chartItems) => {
-    let priceArray = [];
-    chartItems.map((element)=>priceArray.push(element.itemPrice));
-    let totalPrice = priceArray.reduce((a, b)=>a+b, 0);
-    return totalPrice;
-}
 
 export default function Chart(){
-    const [isLoading, setIsLoading] = useBoolean(false);
-    const [items, setItems] = useState(fItems);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const QunatityContext = createContext();
+    const [isLoading, setIsLoading] = useState(false);
+    const {totalChartPrice, items} = useContext(ChartContext);
 
-    useEffect(()=>{
-        setTotalPrice(getTotalPrice(items));
-    }, [items])
+    
 
     return(
         <Stack
             bg={"gray.100"}
         >
-            <QunatityContext.Provider value={""}>
-                <SearchBar />
+            <SearchBar />
                 <Flex
                     bgColor={"white"}
                     align={"center"}
@@ -61,7 +33,9 @@ export default function Chart(){
 
                 {
                     Array(items.length).fill(' ').map((_, i)=>{
-                        return <ChartItem key={i} props={items[i]} />;
+                        return <ChartItem key={i} 
+                            {...items[i]}
+                        />
                     })
                 }
 
@@ -85,7 +59,7 @@ export default function Chart(){
                                 as={"h1"}
                                 fontSize={"1.6em"}
                             >
-                                ${totalPrice}
+                                ${totalChartPrice}
                             </Heading>
                         </Box>
                     </Stack>
@@ -103,7 +77,6 @@ export default function Chart(){
                         </Button>
                     </Flex>
                 </Flex>
-            </QunatityContext.Provider>
         </Stack>
     );
 }
