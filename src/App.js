@@ -7,7 +7,7 @@ import Chart from "./pages/chart";
 import ChartContextProvider from "./components/context/chartContext";
 
 function App() {
-  const test = true;
+  const test = false;
 
   return (
     <ChakraProvider>
@@ -18,11 +18,12 @@ function App() {
         >
           {
             test ? 
-            <Chart />
+            ""
             :
             <Routes>
               <Route path='/' element={<MainSale />} />
               <Route path='/item/:itemID' element={<ItemDetail />}  />
+              <Route path='/chart' element={<Chart />}  />
               <Route path='*' element={<MainSale />} />
           </Routes>
           }

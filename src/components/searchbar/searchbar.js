@@ -1,14 +1,16 @@
-import { Flex, Heading, Input, InputGroup, InputLeftElement, Box, Link} from '@chakra-ui/react'
+import { Flex, Heading, Input, InputGroup, InputLeftElement, Box, Link, Text, Icon, Center} from '@chakra-ui/react'
 import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search, User } from "react-feather";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate, useSearchParams, Link as ReactLink } from 'react-router-dom';
+import { ChartContext } from '../context/chartContext';
 
 export default function SearchBar(props) {
     const [searchText, setSearchText] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { items } = useContext(ChartContext);
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
 
@@ -59,12 +61,45 @@ export default function SearchBar(props) {
                     </InputGroup>
                 </form>
             </Box>
-            <ActionIcon 
-                size={"sm"}
-                label={"Shopping chart"}
-                icon={<ShoppingCart />}
-                onClick={()=>{console.log("Chart")}}
-            />
+        <Link 
+            as={ReactLink}
+            to={"/chart"} 
+        >
+            <Flex
+                p={"4px"}
+                position={"relative"}
+                h={"100%"}
+                alignContent={"center"}
+            >
+                <Center>
+                    <Icon 
+                        label={"Shopping chart"}
+                        as={ShoppingCart}
+                        boxSize={6}
+                    />
+                </Center>
+                <Flex
+                    w={"15px"}
+                    h={"15px"}
+                    position={"absolute"}
+                    bottom={"0"}
+                    right={"0"}
+                    display={items.length > 0 ? "flex":"none"}
+                    bgColor={"red"}
+                    borderRadius={"13px"}
+                    justify={"center"}
+                >
+                    <Text
+                        p={0}
+                        fontSize={"10px"}
+                        fontWeight={"bold"}
+                        color={"white"}
+                    >
+                        {items.length}
+                    </Text>
+                </Flex>
+            </Flex>
+        </Link>
 
             <ActionIcon 
                 size={"sm"}

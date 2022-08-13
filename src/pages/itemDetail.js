@@ -1,4 +1,4 @@
-import { Stack, Flex } from "@chakra-ui/react";
+import { Stack, Flex, useBoolean } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "../components/smallcomponent/loading/loading";
@@ -10,24 +10,26 @@ import SearchBar from "../components/searchbar/searchbar";
 export default function ItemDetail(){
     const params = useParams();
     const [itemDetail, setItemDetail] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useBoolean(true);
 
     const getItem = async () =>{
-        const response = await fetch("https://fakestoreapi.com/products/"+params.itemID);
+        const response = await fetch("https://fakestoreapi.com/products/"+params.itemID, {
+            cache:"reload"
+        });
         const result = await response.json();
         return result;
     }
 
     const setFetchedItem = async () =>{
         try{
-            setLoading(true);
+            setIsLoading.on();
             setItemDetail(await getItem());
         }
         catch(err){
             console.log(err);
         }
         finally{
-            setLoading(false);
+            setIsLoading.off();
         }
     }
 
@@ -38,7 +40,7 @@ export default function ItemDetail(){
     return(
                     <Stack>
                         <SearchBar />
-                        { loading ?
+                        { isLoading ?
                             <Loading />
                             :
                             <Stack 

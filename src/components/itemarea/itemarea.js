@@ -5,10 +5,12 @@ import Item from "../item/item";
 
 export default function ItemArea(props) {
     const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useBoolean(false);
+    const [isLoading, setIsLoading] = useBoolean(true);
 
     const getItems = async () => {
-        const response = await fetch("https://fakestoreapi.com/products")
+        const response = await fetch("https://fakestoreapi.com/products", {
+            cache:"reload"
+        })
         const result = await response.json();
         return result;
     }
@@ -21,7 +23,7 @@ export default function ItemArea(props) {
 
     const searchItems = async () => {
         try{
-            setIsLoading.toggle();
+            setIsLoading.on();
             const fetchedItems = await getItems();
             const temp_items = []
             
@@ -46,7 +48,7 @@ export default function ItemArea(props) {
             console.error(err);
         }
         finally{
-            setIsLoading.toggle()
+            setIsLoading.off()
         }
     }
 

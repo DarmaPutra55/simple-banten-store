@@ -84,3 +84,15 @@ Example:
     to={"/item/"+props.id}
     reloadDocument //Add this.
 >
+
++Don't use setState inside a loop, this will cause a nasty bug.
+
++When using array.map or filter, remember to return the element.
+Example:
+
+const exampleFunc = () => {
+	exampleArray = exampleSourceArray.map((element)=>{
+		//do something with the element here
+		return element // <- THIS IS IMPORTANT! Otherwise you will get undefined for your array element
+	})
+}
