@@ -98,3 +98,14 @@ const exampleFunc = () => {
 }
 
 +Multiple Contex values should always be object, never turn it into array
+
++Use Promise.all when trying to do async operation inside a map to wait until all promise is resolved before using it to make array
+Example:
+
+const newArray = await Promise.all(oldArray.map(async (element) => {
+                //Do thing here
+
+                return element;
+			}
+		)
+	)
