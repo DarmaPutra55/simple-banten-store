@@ -1,5 +1,5 @@
-import { Flex, Heading, Stack, Box, Text, Button  } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { Flex, Heading, Stack, Box, Text, Button, useBoolean} from "@chakra-ui/react";
+import { useContext, useEffect } from "react";
 import SearchBar from "../components/searchbar/searchbar";
 import ChartItem from "../components/chartItem/chartItem";
 import Loading from "../components/smallcomponent/loading/loading"
@@ -7,7 +7,7 @@ import { ChartContext } from "../components/context/chartContext";
 
 
 export default function Chart(){
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useBoolean(true);
     const {totalChartPrice, items} = useContext(ChartContext);
 
     

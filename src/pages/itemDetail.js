@@ -1,4 +1,4 @@
-import { Stack, Flex, useBoolean } from "@chakra-ui/react";
+import { Stack, useBoolean } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "../components/smallcomponent/loading/loading";
@@ -6,24 +6,17 @@ import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDeta
 import ItemDetailInformation from "../components/itemDetail/itemDetailInformation/itemDetailInformation";
 import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
 import SearchBar from "../components/searchbar/searchbar";
+import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
 
 export default function ItemDetail(){
     const params = useParams();
     const [itemDetail, setItemDetail] = useState({});
     const [isLoading, setIsLoading] = useBoolean(true);
 
-    const getItem = async () =>{
-        const response = await fetch("https://fakestoreapi.com/products/"+params.itemID, {
-            cache:"reload"
-        });
-        const result = await response.json();
-        return result;
-    }
-
     const setFetchedItem = async () =>{
         try{
             setIsLoading.on();
-            setItemDetail(await getItem());
+            setItemDetail(await fetchApi("https://fakestoreapi.com/products/"+params.itemID));
         }
         catch(err){
             console.log(err);
@@ -38,8 +31,8 @@ export default function ItemDetail(){
     }, [])
 
     return(
-                    <Stack>
-                        <SearchBar />
+        <Stack>
+                    <SearchBar />
                         { isLoading ?
                             <Loading />
                             :
@@ -71,6 +64,6 @@ export default function ItemDetail(){
                                 />
                             </Stack>
                         }
-                    </Stack>
+        </Stack>
     );
 }

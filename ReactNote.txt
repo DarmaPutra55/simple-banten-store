@@ -96,3 +96,5 @@ const exampleFunc = () => {
 		return element // <- THIS IS IMPORTANT! Otherwise you will get undefined for your array element
 	})
 }
+
++Multiple Contex values should always be object, never turn it into array

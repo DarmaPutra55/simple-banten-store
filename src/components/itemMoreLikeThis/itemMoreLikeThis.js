@@ -3,25 +3,18 @@ import { useEffect, useState } from "react";
 import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
 import { Link as ReactLink } from "react-router-dom";
+import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 
 export default function ItemMoreLikeThis(props) {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useBoolean(true);
 
-    const getItems = async () => {
-        const response = await fetch("https://fakestoreapi.com/products/category/"+props.category+"?limit=5", {
-            cache:"reload"
-        });
-        const result = await response.json();
-        return result;
-    }
-
-    const fillItems = async () => {
+    const intitializeItemMoreLikeThis = async () => {
         try{
             setIsLoading.on();
-            const fetchedItems = await getItems();
-            const temp_items = []
-            fetchedItems.forEach(element => {
+            const fetchedItems = await fetchApi("https://fakestoreapi.com/products/category/"+props.category+"?limit=5");
+            setItems(()=>{
+                return fetchedItems.map(element => {
                     const item = {
                         "id": element.id,
                         "img": element.image,
@@ -30,9 +23,10 @@ export default function ItemMoreLikeThis(props) {
                         "name": element.title,
                         "rating": element.rating.rate,
                         "sold": 130
-                    };
-                temp_items.push(item)
-                setItems(temp_items);
+                    }
+
+                    return item
+                })
             });
         }
         catch(err){
@@ -44,7 +38,7 @@ export default function ItemMoreLikeThis(props) {
     }
 
     useEffect(()=>{
-        fillItems();
+        intitializeItemMoreLikeThis();
     }, [])
 
     return(

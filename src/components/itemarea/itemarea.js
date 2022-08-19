@@ -2,18 +2,11 @@ import { Flex, useBoolean } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
+import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 
 export default function ItemArea(props) {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useBoolean(true);
-
-    const getItems = async () => {
-        const response = await fetch("https://fakestoreapi.com/products", {
-            cache:"reload"
-        })
-        const result = await response.json();
-        return result;
-    }
 
     const itemValidator = (element) => {
         if(props.searchParams.has("itemCategory") && element.category.toLowerCase() !== props.searchParams.get("itemCategory")) return false;
@@ -24,7 +17,7 @@ export default function ItemArea(props) {
     const searchItems = async () => {
         try{
             setIsLoading.on();
-            const fetchedItems = await getItems();
+            const fetchedItems = await fetchApi("https://fakestoreapi.com/products");
             const temp_items = []
             
             fetchedItems.forEach(element => {

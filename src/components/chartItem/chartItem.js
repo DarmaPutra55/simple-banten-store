@@ -1,20 +1,24 @@
 import { Stack, Flex, Checkbox, Heading, Text, HStack, Link, Image } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom';
-import ActionIcon from "../../components/smallcomponent/icons/icon";
 import { Trash } from "react-feather";
 import { useItemQunatity } from "./chartItemQuantityManager/itemQuantityHooks";
-import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
 import { useContext, useEffect, useState } from 'react';
 import { ChartContext } from '../context/chartContext';
+import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
+import ActionIcon from "../../components/smallcomponent/icons/icon";
 
 export default function ChartItem({chartID, itemID, itemImg, itemName, itemQuantity, itemPrice, itemStock}){
     const [itemBought, setItemBought] = useItemQunatity(itemQuantity, itemStock);
     const [itemChecked, setItemChecked] = useState(true);
     const [totalPrice, setTotalPrice] = useState(0);
-    const {changeChartItemQuantity, itemCheckHandler} = useContext(ChartContext);
+    const {changeChartItemQuantity, itemCheckHandler, removeItem} = useContext(ChartContext);
 
     const checkClickHandler = () =>{
         setItemChecked(!itemChecked);
+    }
+
+    const trashClickHandler = () => {
+        removeItem(chartID);
     }
     
     useEffect(()=>{
@@ -103,7 +107,7 @@ export default function ChartItem({chartID, itemID, itemImg, itemName, itemQuant
                         size={"sm"}
                         label={"Item Trash"}
                         icon={<Trash />}
-                        onClick={()=>{console.log("Trash")}}
+                        onClick={trashClickHandler}
                     />
                 </Stack>
             </HStack>
