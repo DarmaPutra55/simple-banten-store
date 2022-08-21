@@ -26,7 +26,7 @@ export default function Item(props){
                         w={"100%"}
                         fit={"contain"}
                         src= {props.img}
-                        alt="Estate" 
+                        alt= {props.name} 
                     />
 
                     <Stack 

@@ -2,7 +2,7 @@ import { InputGroup, InputLeftAddon, InputRightAddon, Input } from '@chakra-ui/r
 import { Plus, Minus } from "react-feather";
 import ActionIcon from "../../../components/smallcomponent/icons/icon";
 
-export default function ChartItemQuantitiyManager({itemQuantity, setItemQuantity}){
+export default function ChartItemQuantitiyManager({onOpen, itemQuantity, setItemQuantity}){
     
     const inputChangeHandler = (e) => {
         setItemQuantity(e.target.value);
@@ -13,7 +13,12 @@ export default function ChartItemQuantitiyManager({itemQuantity, setItemQuantity
     }
 
     const minusChangeHandler = () => {
-        setItemQuantity(itemQuantity-1);
+        if(itemQuantity === 1){
+            onOpen()
+        }
+        else{
+            setItemQuantity(itemQuantity-1);
+        }
     }
 
     return(

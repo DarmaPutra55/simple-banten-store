@@ -109,3 +109,36 @@ const newArray = await Promise.all(oldArray.map(async (element) => {
 			}
 		)
 	)
+
++For chakra-ui, you can modifiy alert dialogue and modal by adding align-self to <AlertContent> and <ModalContent>
+Example:
+
+<AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent
+            alignSelf={"center"}
+          > //Modifiy this one.
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Hapus Barang
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Hapus barang dari keranjang belanja?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme='red' onClick={removeItemHandler} ml={3}>
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
