@@ -94,7 +94,7 @@ export default function ChartContextProvider({ children }) {
     }, [])
 
     useEffect(() => {
-        setTotalChartPrice(items.length > 0 ? items.reduce((previousPrice, item) => item.checked ? previousPrice + item.itemPrice * item.itemQuantity : previousPrice, 0) : 0)
+        setTotalChartPrice(items.length > 0 ? (items.reduce((previousPrice, item) => item.checked ? previousPrice + item.itemPrice * item.itemQuantity : previousPrice, 0)).toFixed(1) : 0)
     }, [items])
 
     return (
