@@ -45,30 +45,36 @@ export default function Item(props){
                             as={"h2"}
                             size={"md"} 
                             textColor={
-                                !props.originalPrice ? "black" : "orange.400"
+                                !props.discount ? "black" : "orange.400"
                             }
                         >
 
-                            ${props.price}
+                            {props.price}
                         
                         </Heading>
                         
-                        <Flex align={"center"}>
                         
-                            <Text 
-                                as={"s"}
-                            >
-                                {props.originalPrice}
-                            </Text>
-                        
-                            <Text
-                                ml={"1.5"}
-                                textColor={"orange.400"}
-                            >
-                                {props.discount}
-                            </Text>
+                            {
+                                ((discount)=>{
+                                    return discount > 0 ? 
+                                    <Flex align={"center"}>
+                                        <Text 
+                                            as={"s"}
+                                        >
+                                            {props.price}
+                                        </Text>
+                                        <Text
+                                            ml={"1.5"}
+                                            textColor={"orange.400"}
+                                        >
+                                            -{props.discount}%
+                                        </Text>
+                                    </Flex>: ""
+                                })(props.discount)
+                            }
+                            
 
-                        </Flex>
+                        
 
                         <Flex 
                             align={"center"}

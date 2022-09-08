@@ -1,14 +1,21 @@
-import { Flex, useBoolean } from "@chakra-ui/react";
 import { createContext, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
-import Loading from "../smallcomponent/loading/loading";
+import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
 
 export const ChartContext = createContext();
+
 
 export default function ChartContextProvider({ children }) {
     const [items, setItems] = useState([]);
     const [totalChartPrice, setTotalChartPrice] = useState(0);
-    const [isLoading, setIsLoading] = useBoolean(true);
+    /*const { data, status } = useQuery("fetchItems", async ()=>{
+        return await fetchApi("https://fakestoreapi.com/carts/1")
+    }, {
+        onSuccess: (data) => {
+            setItems(data.products);
+        }
+    });*/
 
 
     const removeItem = (chartID) => {
@@ -44,21 +51,12 @@ export default function ChartContextProvider({ children }) {
     }
 
     const changeChartItemQuantity = (chartID, itemQuantity) => {
-        setItems(() => {
-            console.log(items)
-            return items.map((item) => {
-                if (item.chartID === chartID) {
-                    item.itemQuantity = itemQuantity
-                }
-
-                return item;
-            })
-        })
+        return;
     }
 
     const initializeItems = async () => {
         try {
-            setIsLoading.on();
+            //setIsLoading.on();
             const fetchedItems = await fetchApi("https://fakestoreapi.com/carts/1");
             console.log(fetchedItems.products);
             const temp_items = await Promise.all(fetchedItems.products.map(async (fetchedItem, index) => {
@@ -83,34 +81,21 @@ export default function ChartContextProvider({ children }) {
         catch (err) {
             console.log(err);
         }
-
-        finally {
-            setIsLoading.off();
-        }
     }
 
-    useEffect(() => {
-        initializeItems();
-    }, [])
 
     useEffect(() => {
-        setTotalChartPrice(items.length > 0 ? (items.reduce((previousPrice, item) => item.checked ? previousPrice + item.itemPrice * item.itemQuantity : previousPrice, 0)).toFixed(1) : 0)
+        //setTotalChartPrice(items.length > 0 ? (items.reduce((previousPrice, item) => item.checked ? previousPrice + item.itemPrice * item.itemQuantity : previousPrice, 0)).toFixed(1) : 0)
     }, [items])
+
+    //if(status === 'loading'){
+      //  return <FullscreeLoading />
+    //}
 
     return (
         <ChartContext.Provider value={{ items, changeChartItemQuantity, itemCheckHandler, addItem, removeItem, totalChartPrice }}>
             {
-                isLoading ? 
-                    <Flex
-                        minH={"100vh"}
-                        minW={"100vw"}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                    >
-                        <Loading />
-                    </Flex> 
-                : 
-                    children
+                children
             }
         </ChartContext.Provider>
     )

@@ -1,0 +1,3 @@
+<ChartContextProvider> 
+                  <Route path='/chart' element={<Chart />}  />
+</ChartContextProvider>

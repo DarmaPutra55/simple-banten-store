@@ -142,3 +142,10 @@ Example:
         </AlertDialogOverlay>
       </AlertDialog>
     </>
+	
++For useQuery, if you want to save fetched data as state for some reason:
+    const { data, status } = useQuery(["items"], fetchItems, {
+        onSuccess: (data) => {
+            setItems(data.products);
+        }
+    });
