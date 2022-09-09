@@ -1,4 +1,4 @@
-import { Box, Image, Text, Heading, Stack, Flex, Icon, AspectRatio, Link } from "@chakra-ui/react";
+import { Box, Image, Text, Heading, Stack, Flex, Icon, AspectRatio, Link, textDecoration } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 import { Star } from "react-feather";
 import '../../style/chakra-util.css';
@@ -18,6 +18,7 @@ export default function Item(props){
                 <Link 
                     as={ReactLink} 
                     to={"/item/"+props.id}
+                    _hover={{"textDecor":"none"}}
                     reloadDocument
                 >
 
@@ -61,7 +62,7 @@ export default function Item(props){
                                         <Text 
                                             as={"s"}
                                         >
-                                            {props.price}
+                                            {props.originalPrice}
                                         </Text>
                                         <Text
                                             ml={"1.5"}

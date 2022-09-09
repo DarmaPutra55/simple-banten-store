@@ -9,9 +9,9 @@ export default function ItemArea(props) {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useBoolean(true);
 
-    const itemValidator = (element) => {
-        if(props.searchParams.has("itemCategory") && element.category.toLowerCase() !== props.searchParams.get("itemCategory")) return false;
-        if(props.searchParams.has("itemName") && !element.title.toLowerCase().includes(props.searchParams.get("itemName"))) return false;
+    const itemValidator = (item) => {
+        if(props.searchParams.has("itemCategory") && item.kategori.toLowerCase() !== props.searchParams.get("itemCategory")) return false;
+        if(props.searchParams.has("itemName") && !item.nama.toLowerCase().includes(props.searchParams.get("itemName"))) return false;
         return true;
     }
 
@@ -29,7 +29,8 @@ export default function ItemArea(props) {
                     "id": fetchedItem.id,
                     "img": fetchedItem.gambar,
                     "discount": fetchedItem.diskon,
-                    "price": fetchedItem.diskon ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon)/100))) : CurrencyFormatter(fetchedItem.harga),
+                    "price": fetchedItem.diskon > 0 ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon)/100))) : CurrencyFormatter(fetchedItem.harga),
+                    "originalPrice" : CurrencyFormatter(fetchedItem.harga),
                     "name": fetchedItem.nama,
                     "rating": fetchedItem.rating.rate,
                     "sold": fetchedItem.terjual
@@ -72,6 +73,7 @@ export default function ItemArea(props) {
                                             img={items[i].img} 
                                             name={items[i].name} 
                                             price={items[i].price} 
+                                            originalPrice={items[i].originalPrice}
                                             discount={items[i].discount} 
                                             rating={items[i].rating} 
                                             sold={items[i].sold} 

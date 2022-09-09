@@ -1,6 +1,7 @@
 import { Stack, useBoolean } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
 import Loading from "../components/smallcomponent/loading/loading";
 import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDetailHeader";
 import ItemDetailInformation from "../components/itemDetail/itemDetailInformation/itemDetailInformation";
@@ -16,7 +17,7 @@ export default function ItemDetail(){
     const setFetchedItem = async () =>{
         try{
             setIsLoading.on();
-            setItemDetail(await fetchApi("https://fakestoreapi.com/products/"+params.itemID));
+            setItemDetail(await fetchApi("http://192.168.1.24:3001/products/"+params.itemID));
         }
         catch(err){
             console.log(err);
@@ -43,25 +44,27 @@ export default function ItemDetail(){
                                 maxW={"100vw"}
                             >
                                 <ItemDetailHeader 
-                                    img={itemDetail.image} 
-                                    name={itemDetail.title} 
+                                    img={itemDetail.gambar} 
+                                    name={itemDetail.nama} 
                                     rating={itemDetail.rating.rate} 
-                                    price={itemDetail.price} 
-                                    originalPrice={itemDetail.originalPrice} 
-                                    discount={itemDetail.discount} 
-                                    ulasan={itemDetail.rating.count} 
+                                    price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon)/100))) : CurrencyFormatter(itemDetail.harga)} 
+                                    originalPrice = {CurrencyFormatter(itemDetail.harga)}
+                                    discount={itemDetail.diskon} 
+                                    ulasan={itemDetail.rating.jumlah_rating} // Make rest api include ulasan!
                                 />
 
                                 <ItemDetailInformation
-                                    kategori={itemDetail.category}
-                                    stock={20}
-                                    sold={6}
-                                    description={itemDetail.description}
+                                    kategori={itemDetail.kategori}
+                                    stock={itemDetail.stok}
+                                    sold={itemDetail.terjual}
+                                    description={itemDetail.deskripsi}
                                 />
 
                                 <ItemMoreLikeThis 
-                                    category={itemDetail.category} 
+                                    itemId={itemDetail.id}
+                                    kategori={itemDetail.kategori} 
                                 />
+                                
                             </Stack>
                         }
         </Stack>

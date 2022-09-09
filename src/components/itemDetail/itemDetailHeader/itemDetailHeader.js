@@ -39,21 +39,21 @@ export default function ItemDetailHeader(props){
                 />
                 <Stack p={"2"} spacing={"4px"}>
                     <Box>
-                        <Text fontWeight={"semibold"}>${props.price}</Text>
+                        <Text fontWeight={"semibold"}>{props.price}</Text>
                         {props.discount?
                             (
                                 <Stack direction={"row"}>
-                                    <Text as='s' color={"gray.400"}>${props.originalPrice}</Text>
+                                    <Text as='s' color={"gray.400"}>{props.originalPrice}</Text>
                                     <Badge
                                         alignSelf={"center"}
                                         backgroundColor={"red"}
                                         textColor={"white"}
                                         fontWeight={"bold"}
-                                    >{props.discount}
+                                    >-{props.discount}%
                                     </Badge>
                                 </Stack>
                             )
-                            : ''
+                            : ""
                         }
                         
                     </Box>
