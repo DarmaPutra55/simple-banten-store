@@ -66,7 +66,7 @@ export default function ItemDetailHeader(props){
                                     {RenderStarRating()}
                                 </Stack>
                                 <Text color={"gray.400"} height={"fit-content"}>
-                                    {props.ulasan} Ulasan
+                                    {props.ulasan} ulasan
                                 </Text>
                             </Stack>
                             <ActionIcon icon={<Heart fill=""/>} fill={fav? "red.500":"gray.300"} color={fav? "red.500":"gray.300"} onClick={handleFavClick} />

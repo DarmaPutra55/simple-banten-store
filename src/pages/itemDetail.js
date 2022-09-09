@@ -50,7 +50,7 @@ export default function ItemDetail(){
                                     price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon)/100))) : CurrencyFormatter(itemDetail.harga)} 
                                     originalPrice = {CurrencyFormatter(itemDetail.harga)}
                                     discount={itemDetail.diskon} 
-                                    ulasan={itemDetail.rating.jumlah_rating} // Make rest api include ulasan!
+                                    ulasan={itemDetail.ulasan} // Make rest api include ulasan!
                                 />
 
                                 <ItemDetailInformation

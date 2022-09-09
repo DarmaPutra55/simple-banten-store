@@ -42,7 +42,6 @@ export default function ItemMoreLikeThis(props) {
 
     useEffect(() => {
         intitializeItemMoreLikeThis();
-        console.log(items);
     }, [])
 
     return (
