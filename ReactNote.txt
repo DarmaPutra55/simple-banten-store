@@ -152,3 +152,52 @@ Example:
 
 +To access local hosted api, use "http://192.168.1.<Your IP>:<Api Port>/<Api Endpoint>";
 Example: http://192.168.1.24:3001/products
+
++Browser will not send cookies unless you set the credential to 'include' in fetch api option.
++Make sure the request header is set into "application/json" when sending data using JSON.
+Example:
+return await fetchApi("http://192.168.1.24:3001/login", {
+            credentials: 'include', //Also send cookies
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringtify(text)
+})
+
++When enabled is set to false in react query, the queries won't run.
+Example:
+const userId = user?.id ? true : false
+
+// Then get the user's projects
+const { status, fetchStatus, data: projects } = useQuery(
+  ['projects', userId],
+  getProjectsByUser,
+  {
+    // Query won't be run if userId is false
+    enabled: userId, 
+  }
+)
+
++However, their status will be set to 'loading' which mean you will get stuck with loading screen if you use "status==='loading'" to check if query is still fetching, instead use "fetchStatus==='fetching'".
+Example:
+const userId = user?.id ? true : false
+
+// Then get the user's projects
+const { status, fetchStatus, data: projects } = useQuery(
+  ['projects', userId],
+  getProjectsByUser,
+  {
+    // Query won't be run if userId is false
+    enabled: userId, 
+  }
+)
+
+return({
+	fetchStatus === 'fetching' ?
+		<Load>
+	:
+		<NormalView>
+})
+
++You can also use allias on destructed object by doing this: { data : newDataAllias } = object //data can be accessed with newDataAllias.

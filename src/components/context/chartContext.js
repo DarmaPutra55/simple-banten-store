@@ -1,53 +1,79 @@
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
+
 
 export const ChartContext = createContext();
 
 
 export default function ChartContextProvider({ children }) {
-    const [items, setItems] = useState([]);
-    const [totalChartPrice, setTotalChartPrice] = useState(0);
-    /*const { data, status } = useQuery("fetchItems", async ()=>{
-        return await fetchApi("https://fakestoreapi.com/carts/1")
-    }, {
-        onSuccess: (data) => {
-            setItems(data.products);
-        }
-    });*/
+    const localCart = JSON.parse(localStorage.getItem('cart'));
+    const isLocalCartEmpty = localCart?.length > 0 ? false : true;
+    const { data: login, fetchStatus: loginStatus } = useQuery(["loginUser"], async ()=>{
+        const form = JSON.stringify({
+            "email":"testing9@testmail.com",
+            "username": "Delta9",
+            "password": "123"
+        })
 
+        /*const formData = new FormData()
+
+        formData.append("email", "testing9@testmail.com");
+        formData.append("username", "Delta9");
+        formData.append('password', '123');*/
+        return await fetchApi("http://192.168.1.24:3001/login", {
+            credentials: 'include', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: form
+        })
+    }, {
+        retry: false
+    })
+
+    const { data: user, fetchStatus: userStatus } = useQuery(["fetchUser"], async ()=>{
+        return await fetchApi("http://192.168.1.24:3001/login", {
+            credentials: 'include',
+        });   
+    }, {
+        enabled: isLocalCartEmpty,
+        retry: false
+    })
+    
+    const { data: items, fetchStatus: itemStatus } = useQuery(["fetchItems"], async ()=>{
+        return await fetchApi("http://192.168.1.24:3001/carts/"+user?.cartId, {
+            credentials: 'include',
+        });
+    }, {
+        enabled: user?.cartId ? true : false,
+        retry: false,
+        onSuccess: (items) => {
+            localStorage.setItem('cart', JSON.stringify(items.table_cart_barang));
+        },
+        onError: (err)=>{
+            localStorage.setItem('cart', JSON.stringify([]));
+        }
+    });
+    const [totalChartPrice, setTotalChartPrice] = useState(0);
 
     const removeItem = (chartID) => {
-        setItems(() => {
-            return items.filter((item) => item.chartID !== chartID)
-        })
+        return;
     }
 
     const addItem = (item) => {
-        setItems([...items, item])
+        return;
     }
 
     const checkItem = (itemID) => {
-        items.forEach(item => {
-            if (item.itemID === itemID) {
-                return true
-            }
-        })
-
-        return false
+        return;
     }
 
     const itemCheckHandler = (chartID, checked) => {
-        setItems(() => {
-            return items.map((item) => {
-                if (item.chartID === chartID) {
-                    item.checked = checked;
-                }
-
-                return item
-            })
-        })
+        return;
     }
 
     const changeChartItemQuantity = (chartID, itemQuantity) => {
@@ -55,47 +81,25 @@ export default function ChartContextProvider({ children }) {
     }
 
     const initializeItems = async () => {
-        try {
-            //setIsLoading.on();
-            const fetchedItems = await fetchApi("https://fakestoreapi.com/carts/1");
-            console.log(fetchedItems.products);
-            const temp_items = await Promise.all(fetchedItems.products.map(async (fetchedItem, index) => {
-                const fetchedItemDetail = await fetchApi("https://fakestoreapi.com/products/" + fetchedItem.productId);
-                const item = {
-                    "chartID": index,
-                    "itemID": fetchedItem.productId,
-                    "itemImg": fetchedItemDetail.image,
-                    "itemName": fetchedItemDetail.title,
-                    "itemQuantity": fetchedItem.quantity,
-                    "itemPrice": fetchedItemDetail.price,
-                    "itemStock": 20,
-                    "checked": true,
-                };
-
-                return item;
-            }))
-
-            setItems(temp_items)
-        }
-
-        catch (err) {
-            console.log(err);
-        }
+        return;
     }
 
 
     useEffect(() => {
         //setTotalChartPrice(items.length > 0 ? (items.reduce((previousPrice, item) => item.checked ? previousPrice + item.itemPrice * item.itemQuantity : previousPrice, 0)).toFixed(1) : 0)
-    }, [items])
+    }, [])
 
     //if(status === 'loading'){
       //  return <FullscreeLoading />
     //}
 
     return (
-        <ChartContext.Provider value={{ items, changeChartItemQuantity, itemCheckHandler, addItem, removeItem, totalChartPrice }}>
+        <ChartContext.Provider value={{}}>
             {
-                children
+                userStatus === 'fetching' || itemStatus === 'fetching' || loginStatus === 'fetchin' ? 
+                    <FullscreeLoading/> 
+                : 
+                    children
             }
         </ChartContext.Provider>
     )
