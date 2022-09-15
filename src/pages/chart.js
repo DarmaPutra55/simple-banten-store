@@ -3,14 +3,13 @@ import { useContext, useEffect } from "react";
 import SearchBar from "../components/searchbar/searchbar";
 import ChartItem from "../components/chartItem/chartItem";
 import Loading from "../components/smallcomponent/loading/loading"
+import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter"
 import { ChartContext } from "../components/context/chartContext";
 
 
 export default function Chart(){
     const [isLoading, setIsLoading] = useBoolean(true);
-    const {totalChartPrice, items} = useContext(ChartContext);
-
-    
+    const {totalChartPrice, cart} = useContext(ChartContext);
 
     return(
         <Stack
@@ -32,11 +31,12 @@ export default function Chart(){
                 </Flex>
 
                 {
-                    Array(items.length).fill(' ').map((_, i)=>{
+                    cart?.length > 0 ? Array(cart.length).fill(' ').map((_, i)=>{
                         return <ChartItem key={i} 
-                            {...items[i]}
+                            {...cart[i]}
                         />
                     })
+                    : ""
                 }
 
                 <Flex
@@ -59,7 +59,7 @@ export default function Chart(){
                                 as={"h1"}
                                 fontSize={"1.6em"}
                             >
-                                ${totalChartPrice}
+                                {CurrencyFormatter(totalChartPrice)}
                             </Heading>
                         </Box>
                     </Stack>

@@ -9,8 +9,8 @@ import { ChartContext } from '../context/chartContext';
 export default function SearchBar() {
     const [searchText, setSearchText] = useState("");
     const [searchParams] = useSearchParams();
-    //const { items } = useContext(ChartContext);
-    const items = [];
+    const { cart } = useContext(ChartContext);
+    const cartCheckedItemCount = cart?.length > 0 ? cart.filter((item)=> item.checked).length : 0;
     const navigate = useNavigate();
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
@@ -85,7 +85,7 @@ export default function SearchBar() {
                     position={"absolute"}
                     bottom={"0"}
                     right={"0"}
-                    display={items.length > 0 ? "flex":"none"}
+                    display={cartCheckedItemCount > 0 ? "flex":"none"}
                     bgColor={"red"}
                     borderRadius={"13px"}
                     justify={"center"}
@@ -96,7 +96,7 @@ export default function SearchBar() {
                         fontWeight={"bold"}
                         color={"white"}
                     >
-                        {items.length}
+                        {cartCheckedItemCount}
                     </Text>
                 </Flex>
             </Flex>

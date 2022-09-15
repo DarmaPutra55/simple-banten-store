@@ -17,7 +17,7 @@ export default function ItemDetail(){
     const setFetchedItem = async () =>{
         try{
             setIsLoading.on();
-            setItemDetail(await fetchApi("http://192.168.1.24:3001/products/"+params.itemID));
+            setItemDetail(await fetchApi("http://192.168.1.22:3001/products/"+params.itemID));
         }
         catch(err){
             console.log(err);
