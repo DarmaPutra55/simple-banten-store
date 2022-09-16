@@ -18,10 +18,10 @@ function App() {
               minW={"100vw"}
             >
               <Routes>
+                  <Route path='*' element={<MainSale />} />
                   <Route path='/' element={<MainSale />} />
                   <Route path='/item/:itemID' element={<ItemDetail />}  />
                   <Route path='/chart' element={<Chart />}  />
-                  <Route path='*' element={<MainSale />} />
               </Routes>
             </Flex>
         </ChartContextProvider>

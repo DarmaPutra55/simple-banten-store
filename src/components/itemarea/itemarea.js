@@ -18,7 +18,7 @@ export default function ItemArea(props) {
     const searchItems = async () => {
         try{
             setIsLoading.on();
-            const fetchedItems = await fetchApi("http://192.168.1.22:3001/products");
+            const fetchedItems = await fetchApi("/products");
             const temp_items = []
             
             fetchedItems.forEach(fetchedItem => {

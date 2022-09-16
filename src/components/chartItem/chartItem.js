@@ -1,7 +1,7 @@
 import { Stack, Flex, Checkbox, Heading, Text, HStack, Link, Image, useDisclosure } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom';
 import { Trash } from "react-feather";
-import { useItemQunatity } from "./chartItemQuantityManager/itemQuantityHooks";
+import { useItemQuantity } from "./chartItemQuantityManager/itemQuantityHooks";
 import { useContext, useEffect, useState } from 'react';
 import { ChartContext } from '../context/chartContext';
 import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
@@ -11,7 +11,7 @@ import CurrencyFormatter from "../../components/smallcomponent/currencyFormatter
 
 export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jumlah, checked}){
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [itemBought, setItemBought] = useItemQunatity(jumlah, stok);
+    const [itemBought, setItemBought] = useItemQuantity(jumlah, stok);
     const [itemChecked, setItemChecked] = useState(checked);
     const [totalPrice, setTotalPrice] = useState(0);
     const {changeChartItemQuantity, itemCheckHandler} = useContext(ChartContext);
@@ -26,11 +26,14 @@ export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jum
     
     useEffect(()=>{
         setTotalPrice(harga * itemBought);
-        //changeChartItemQuantity(chartID, itemBought);
     }, [itemBought, harga])
 
     useEffect(()=>{
-        //itemCheckHandler(chartID, itemChecked)
+        changeChartItemQuantity(id, itemBought);
+    }, [itemBought])
+
+    useEffect(()=>{
+        itemCheckHandler(id, itemChecked)
     }, [itemChecked])
 
     return(
@@ -40,7 +43,7 @@ export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jum
                 bgColor={"white"}
             >
                 <AlertDialog
-                    chartID={id}
+                    chartItemId={id}
                     isOpen={isOpen}
                     onClose={onClose}
                 />

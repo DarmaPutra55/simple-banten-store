@@ -36,8 +36,8 @@ export default function ChartItemQuantitiyManager({onOpen, itemQuantity, setItem
                 />
             </InputLeftAddon>
             <Input
-                minW={'50px'}
-                maxW={'50px'}
+                minW={'65px'}
+                maxW={'65px'}
                 value={itemQuantity}
                 textAlign={"center"}
                 onChange={inputChangeHandler}

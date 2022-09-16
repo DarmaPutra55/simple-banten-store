@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useItemQunatity(itemQuantity, itemStock){
+export function useItemQuantity(itemQuantity, itemStock){
     const [tempItemQuantity, setTempItemQuantity] = useState();
     const [newItemQuantity, setNewItemQuantity] = useState(itemQuantity);
     

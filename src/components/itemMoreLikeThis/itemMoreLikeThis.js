@@ -13,7 +13,7 @@ export default function ItemMoreLikeThis(props) {
     const intitializeItemMoreLikeThis = async () => {
         try {
             setIsLoading.on();
-            const fetchedItems = (await fetchApi("http://192.168.1.24:3001/products/category/" + props.kategori + "?limit=5")).filter((fetchedItem)=> fetchedItem.id !== props.itemId);
+            const fetchedItems = (await fetchApi("/products/category/" + props.kategori + "?limit=5")).filter((fetchedItem)=> fetchedItem.id !== props.itemId);
             if(fetchedItems.length === 0) return;
             setItems(() => {
                 return fetchedItems.map(fetchedItem => {

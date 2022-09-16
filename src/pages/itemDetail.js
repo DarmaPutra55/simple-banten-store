@@ -1,4 +1,4 @@
-import { Stack, useBoolean } from "@chakra-ui/react";
+import { Stack, Text, Flex, useBoolean } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
@@ -17,7 +17,7 @@ export default function ItemDetail(){
     const setFetchedItem = async () =>{
         try{
             setIsLoading.on();
-            setItemDetail(await fetchApi("http://192.168.1.22:3001/products/"+params.itemID));
+            setItemDetail(await fetchApi("/products/"+params.itemID));
         }
         catch(err){
             console.log(err);
@@ -36,6 +36,13 @@ export default function ItemDetail(){
                     <SearchBar />
                         { isLoading ?
                             <Loading />
+                            :
+                            !itemDetail?.id ?
+                            <Flex justify={"center"} align={"center"}> 
+                                <Text>
+                                    Barang tidak ditemukan!
+                                </Text>
+                            </Flex>
                             :
                             <Stack 
                                 minH={"100vh"} 

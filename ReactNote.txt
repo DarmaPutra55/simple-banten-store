@@ -201,3 +201,5 @@ return({
 })
 
 +You can also use allias on destructed object by doing this: { data : newDataAllias } = object //data can be accessed with newDataAllias.
+
++Promise and array.reduce() did not mix well. AVOID USING ARRAY.REDUCE() WITH PROMISE!

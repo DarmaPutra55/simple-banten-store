@@ -4,6 +4,7 @@ import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
 import GetLoginInformation from "../smallcomponent/getLoginInformation/getLoginInformation";
+import Item from "../item/item";
 
 
 export const ChartContext = createContext();
@@ -25,7 +26,7 @@ export default function ChartContextProvider({ children }) {
         formData.append("email", "testing9@testmail.com");
         formData.append("username", "Delta9");
         formData.append('password', '123');*/
-        return await fetchApi("http://192.168.1.22:3001/login", {
+        return await fetchApi("/login", {
             credentials: 'include', // include, *same-origin, omit
             headers: {
                 'Content-Type': 'application/json'
@@ -38,22 +39,21 @@ export default function ChartContextProvider({ children }) {
     })
 
     const [user, userFetchStatus] = GetLoginInformation({
-        enabled: isLocalCartEmpty,
         retry: false
     })
 
     const { data: items, fetchStatus: itemFetchStatus } = useQuery(["fetchItems"], async () => {
-        return await fetchApi("http://192.168.1.22:3001/carts/" + user?.cartId, {
+        return await fetchApi("/carts/" + user?.cartId, {
             credentials: 'include',
         });
     }, {
-        enabled: user?.cartId ? true : false,
+        enabled: user?.cartId && isLocalCartEmpty? true : false,
         retry: false,
     });
 
     const { data: detailedItems, fetchStatus: detailedItemsFetchStatus } = useQuery(["fetchedItemDetail"], async () => {
         return await Promise.all(items.table_cart_barang.map(async (item) => {
-            const detailedItem = await fetchApi('http://192.168.1.22:3001/products/' + item.id_barang);
+            const detailedItem = await fetchApi('/products/' + item.id_barang);
             item.gambar = detailedItem.gambar
             item.nama = detailedItem.nama;
             item.stok = detailedItem.stok;
@@ -71,8 +71,8 @@ export default function ChartContextProvider({ children }) {
         }
     })
 
-    const cartRemoveItemMutation = useMutation(removedCartItemId => {
-        return fetchApi('http://192.168.1.22:3001/carts/' + user?.cartId + "/" + removedCartItemId,
+    const cartRemoveItemMutation = useMutation(([cartId, removedCartItemId]) => {
+        return fetchApi('/carts/' + cartId + "/" + removedCartItemId,
             {
                 credentials: 'include',
                 method: "DELETE"
@@ -80,14 +80,16 @@ export default function ChartContextProvider({ children }) {
     })
 
     const cartCheckedItemMutation = useMutation(checkedCartItemId => {
-        return fetchApi("http://192.168.1.22:3001/carts/" + user?.cartId + '/' + checkedCartItemId, {
+        return fetchApi("/carts/" + user?.cartId + '/' + checkedCartItemId, {
             credentials: 'include',
             method: "UPDATE"
         });
     })
 
     const removeItem = (cartItemId) => {
-        cartRemoveItemMutation.mutate(cartItemId);
+        if(typeof cartItemId !== 'number') return;
+        cartRemoveItemMutation.mutate([user?.cartId, cartItemId]);
+        setCart((cart)=>{return cart.filter((item)=>item?.id !== cartItemId)});
         console.log("Done");
     }
 
@@ -95,24 +97,28 @@ export default function ChartContextProvider({ children }) {
         return;
     }
 
-    const checkItem = (itemID) => {
+    const checkItem = (cartItemId) => {
         return;
     }
 
-    const itemCheckHandler = (chartID, checked) => {
-        return;
+    const itemCheckHandler = (cartItemId, checked) => {
+        if(typeof checked !== 'boolean') return;
+        setCart((cart)=>{return cart.map((item)=>{
+            if(item?.id === cartItemId) item.checked = checked;
+            return item;
+        })})
     }
 
-    const changeChartItemQuantity = (chartID, itemQuantity) => {
-        return;
+    const changeChartItemQuantity = (cartItemId, jumlah) => {
+        if(typeof jumlah !== 'number') return;
+        setCart((cart)=>{return cart.map((item)=>{
+            if(item?.id === cartItemId) item.jumlah = jumlah;
+            return item;
+        })})
     }
 
     const initializeItems = async () => {
         return;
-    }
-
-    const cartAddItemDetail = async () => {
-
     }
 
     useEffect(() => {
@@ -125,7 +131,7 @@ export default function ChartContextProvider({ children }) {
     //}
 
     return (
-        <ChartContext.Provider value={{ cart, totalChartPrice }}>
+        <ChartContext.Provider value={{ cart, totalChartPrice, removeItem, itemCheckHandler, changeChartItemQuantity }}>
             {
                 detailedItemsFetchStatus === 'fetching' || userFetchStatus === 'fetching' || itemFetchStatus === 'fetching' || loginFetchStatus === 'fetchin' ?
                     <FullscreeLoading />

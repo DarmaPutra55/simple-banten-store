@@ -10,12 +10,12 @@ import {
 import { ChartContext } from '../context/chartContext';
 import { useContext, useRef } from 'react'
 
-export default function AlertDialog ({chartID, isOpen, onClose}) {
+export default function AlertDialog ({chartItemId, isOpen, onClose}) {
   const cancelRef = useRef()
   const { removeItem } = useContext(ChartContext);
 
   const removeItemHandler = () =>{
-    removeItem(chartID)
+    removeItem(chartItemId)
     onClose()
   }
 
