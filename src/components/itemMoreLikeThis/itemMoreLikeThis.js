@@ -13,15 +13,15 @@ export default function ItemMoreLikeThis(props) {
     const intitializeItemMoreLikeThis = async () => {
         try {
             setIsLoading.on();
-            const fetchedItems = (await fetchApi("/products/category/" + props.kategori + "?limit=5")).filter((fetchedItem)=> fetchedItem.id !== props.itemId);
-            if(fetchedItems.length === 0) return;
+            const fetchedItems = (await fetchApi("/products/category/" + props.kategori + "?limit=5")).filter((fetchedItem) => fetchedItem.id !== props.itemId);
+            if (fetchedItems.length === 0) return;
             setItems(() => {
                 return fetchedItems.map(fetchedItem => {
                     const item = {
                         "id": fetchedItem.id,
                         "img": fetchedItem.gambar,
                         "discount": fetchedItem.diskon,
-                        "price": fetchedItem.diskon > 0 ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon)/100))) : CurrencyFormatter(fetchedItem.harga),
+                        "price": fetchedItem.diskon > 0 ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon) / 100))) : CurrencyFormatter(fetchedItem.harga),
                         "originalPrice": CurrencyFormatter(fetchedItem.harga),
                         "name": fetchedItem.nama,
                         "rating": fetchedItem.rating.rate,

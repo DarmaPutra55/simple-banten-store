@@ -9,71 +9,71 @@ import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
 import SearchBar from "../components/searchbar/searchbar";
 import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
 
-export default function ItemDetail(){
+export default function ItemDetail() {
     const params = useParams();
     const [itemDetail, setItemDetail] = useState({});
     const [isLoading, setIsLoading] = useBoolean(true);
 
-    const setFetchedItem = async () =>{
-        try{
+    const setFetchedItem = async () => {
+        try {
             setIsLoading.on();
-            setItemDetail(await fetchApi("/products/"+params.itemID));
+            setItemDetail(await fetchApi("/products/" + params.itemID));
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
-        finally{
+        finally {
             setIsLoading.off();
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setFetchedItem();
     }, [])
 
-    return(
+    return (
         <Stack>
-                    <SearchBar />
-                        { isLoading ?
-                            <Loading />
-                            :
-                            !itemDetail?.id ?
-                            <Flex justify={"center"} align={"center"}> 
-                                <Text>
-                                    Barang tidak ditemukan!
-                                </Text>
-                            </Flex>
-                            :
-                            <Stack 
-                                minH={"100vh"} 
-                                backgroundColor={"gray.100"} 
-                                spacing={"18px"} 
-                                maxW={"100vw"}
-                            >
-                                <ItemDetailHeader 
-                                    img={itemDetail.gambar} 
-                                    name={itemDetail.nama} 
-                                    rating={itemDetail.rating.rate} 
-                                    price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon)/100))) : CurrencyFormatter(itemDetail.harga)} 
-                                    originalPrice = {CurrencyFormatter(itemDetail.harga)}
-                                    discount={itemDetail.diskon} 
-                                    ulasan={itemDetail.ulasan} // Make rest api include ulasan!
-                                />
+            <SearchBar />
+            {isLoading ?
+                <Loading />
+                :
+                !itemDetail?.id ?
+                    <Flex justify={"center"} align={"center"}>
+                        <Text>
+                            Barang tidak ditemukan!
+                        </Text>
+                    </Flex>
+                    :
+                    <Stack
+                        minH={"100vh"}
+                        backgroundColor={"gray.100"}
+                        spacing={"18px"}
+                        maxW={"100vw"}
+                    >
+                        <ItemDetailHeader
+                            img={itemDetail.gambar}
+                            name={itemDetail.nama}
+                            rating={itemDetail.rating.rate}
+                            price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon) / 100))) : CurrencyFormatter(itemDetail.harga)}
+                            originalPrice={CurrencyFormatter(itemDetail.harga)}
+                            discount={itemDetail.diskon}
+                            ulasan={itemDetail.ulasan} // Make rest api include ulasan!
+                        />
 
-                                <ItemDetailInformation
-                                    kategori={itemDetail.kategori}
-                                    stock={itemDetail.stok}
-                                    sold={itemDetail.terjual}
-                                    description={itemDetail.deskripsi}
-                                />
+                        <ItemDetailInformation
+                            kategori={itemDetail.kategori}
+                            stock={itemDetail.stok}
+                            sold={itemDetail.terjual}
+                            description={itemDetail.deskripsi}
+                        />
 
-                                <ItemMoreLikeThis 
-                                    itemId={itemDetail.id}
-                                    kategori={itemDetail.kategori} 
-                                />
-                                
-                            </Stack>
-                        }
+                        <ItemMoreLikeThis
+                            itemId={itemDetail.id}
+                            kategori={itemDetail.kategori}
+                        />
+
+                    </Stack>
+            }
         </Stack>
     );
 }

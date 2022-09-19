@@ -1,4 +1,4 @@
-import { Flex, Heading, Input, InputGroup, InputLeftElement, Box, Link, Text, Icon, Center} from '@chakra-ui/react'
+import { Flex, Heading, Input, InputGroup, InputLeftElement, Box, Link, Text, Icon, Center } from '@chakra-ui/react'
 import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search, User } from "react-feather";
@@ -10,26 +10,26 @@ export default function SearchBar() {
     const [searchText, setSearchText] = useState("");
     const [searchParams] = useSearchParams();
     const { cart } = useContext(ChartContext);
-    const cartCheckedItemCount = cart?.length > 0 ? cart.filter((item)=> item.checked).length : 0;
+    const cartCheckedItemCount = cart?.length > 0 ? cart.filter((item) => item.checked).length : 0;
     const navigate = useNavigate();
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
 
-    return(
-        <Flex 
+    return (
+        <Flex
             p={"10px"}
-            minW={"100vw"} 
-            justify={"space-between"} 
-            shadow={"sm"} 
-            position={"sticky"} 
-            top={"0"} 
-            left={"0"} 
-            bgColor={"white"} 
+            minW={"100vw"}
+            justify={"space-between"}
+            shadow={"sm"}
+            position={"sticky"}
+            top={"0"}
+            left={"0"}
+            bgColor={"white"}
             zIndex={"100"}
         >
-            <Link 
+            <Link
                 as={ReactLink}
-                to={"/"} 
+                to={"/"}
                 h={"100%"}
             >
                 <Flex
@@ -37,77 +37,87 @@ export default function SearchBar() {
                     align={"center"}
                     justify={"center"}
                 >
-                    <Heading 
-                        as={"h1"} 
-                        fontSize={"1.1em"} 
-                        pr={2} 
+                    <Heading
+                        as={"h1"}
+                        fontSize={"1.1em"}
+                        pr={2}
                     >
                         BanStore
-                    </Heading> 
+                    </Heading>
                 </Flex>
             </Link>
             <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
-                <form onSubmit={(e)=>{
+                <form onSubmit={(e) => {
                     e.preventDefault();
-                    navigate(searchText ? "/?itemName="+searchText : "/", {replace:true});
+                    navigate(searchText ? "/?itemName=" + searchText : "/", { replace: true });
                 }}>
                     <InputGroup pr={2}>
-                        <InputLeftElement 
+                        <InputLeftElement
                             pointerEvents='none'
                             children={
-                                <Search color='grey' size={20}/>
-                            } 
+                                <Search color='grey' size={20} />
+                            }
                         />
-                            <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e)=>{setSearchText(e.target.value)}}/>
+                        <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e) => { setSearchText(e.target.value) }} />
                     </InputGroup>
                 </form>
             </Box>
-        <Link 
-            as={ReactLink}
-            to={"/chart"} 
-        >
-            <Flex
-                p={"4px"}
-                position={"relative"}
-                h={"100%"}
-                alignContent={"center"}
+            <Link
+                as={ReactLink}
+                to={"/chart"}
             >
-                <Center>
-                    <Icon 
-                        label={"Shopping chart"}
-                        as={ShoppingCart}
-                        boxSize={6}
-                    />
-                </Center>
                 <Flex
-                    w={"15px"}
-                    h={"15px"}
-                    position={"absolute"}
-                    bottom={"0"}
-                    right={"0"}
-                    display={cartCheckedItemCount > 0 ? "flex":"none"}
-                    bgColor={"red"}
-                    borderRadius={"13px"}
-                    justify={"center"}
+                    p={"4px"}
+                    position={"relative"}
+                    h={"100%"}
+                    alignContent={"center"}
                 >
-                    <Text
-                        p={0}
-                        fontSize={"10px"}
-                        fontWeight={"bold"}
-                        color={"white"}
+                    <Center>
+                        <Icon
+                            label={"Shopping chart"}
+                            as={ShoppingCart}
+                            boxSize={6}
+                        />
+                    </Center>
+                    <Flex
+                        w={"15px"}
+                        h={"15px"}
+                        position={"absolute"}
+                        bottom={"0"}
+                        right={"0"}
+                        display={cartCheckedItemCount > 0 ? "flex" : "none"}
+                        bgColor={"red"}
+                        borderRadius={"13px"}
+                        justify={"center"}
                     >
-                        {cartCheckedItemCount}
-                    </Text>
+                        <Text
+                            p={0}
+                            fontSize={"10px"}
+                            fontWeight={"bold"}
+                            color={"white"}
+                        >
+                            {cartCheckedItemCount}
+                        </Text>
+                    </Flex>
                 </Flex>
-            </Flex>
-        </Link>
-
-            <ActionIcon 
-                size={"sm"}
-                label={"User"}
-                icon={<User />}
-                onClick={()=>{console.log("User")}}
-            />
-       </Flex>
+            </Link>
+            <Link
+                as={ReactLink}
+                to={"/login"}
+            >
+                <Flex
+                    p={"4px"}
+                    position={"relative"}
+                    h={"100%"}
+                    alignContent={"center"}
+                >
+                    <ActionIcon
+                        size={"sm"}
+                        label={"User"}
+                        icon={<User />}
+                    />
+                </Flex>
+            </Link>
+        </Flex>
     );
 }

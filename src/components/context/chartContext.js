@@ -1,5 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { useContext, createContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { UserContext } from "./userContext"
 import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
@@ -14,40 +15,14 @@ export default function ChartContextProvider({ children }) {
     const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')))
     const [totalChartPrice, setTotalChartPrice] = useState(0);
     const isLocalCartEmpty = cart?.length > 0 ? false : true;
-    const { data: login, fetchStatus: loginFetchStatus } = useQuery(["loginUser"], async () => {
-        const form = JSON.stringify({
-            "email": "testing9@testmail.com",
-            "username": "Delta9",
-            "password": "123"
-        })
-
-        /*const formData = new FormData()
-
-        formData.append("email", "testing9@testmail.com");
-        formData.append("username", "Delta9");
-        formData.append('password', '123');*/
-        return await fetchApi("/login", {
-            credentials: 'include', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: form
-        })
-    }, {
-        retry: false
-    })
-
-    const [user, userFetchStatus] = GetLoginInformation({
-        retry: false
-    })
+    const { user } = useContext(UserContext)
 
     const { data: items, fetchStatus: itemFetchStatus } = useQuery(["fetchItems"], async () => {
         return await fetchApi("/carts/" + user?.cartId, {
             credentials: 'include',
         });
     }, {
-        enabled: user?.cartId && isLocalCartEmpty? true : false,
+        enabled: user?.cartId && isLocalCartEmpty ? true : false,
         retry: false,
     });
 
@@ -71,7 +46,7 @@ export default function ChartContextProvider({ children }) {
         }
     })
 
-    const cartRemoveItemMutation = useMutation(([cartId, removedCartItemId]) => {
+    const cartRemoveItemMutation = useMutation(({ cartId, removedCartItemId }) => {
         return fetchApi('/carts/' + cartId + "/" + removedCartItemId,
             {
                 credentials: 'include',
@@ -87,9 +62,9 @@ export default function ChartContextProvider({ children }) {
     })
 
     const removeItem = (cartItemId) => {
-        if(typeof cartItemId !== 'number') return;
-        cartRemoveItemMutation.mutate([user?.cartId, cartItemId]);
-        setCart((cart)=>{return cart.filter((item)=>item?.id !== cartItemId)});
+        if (typeof cartItemId !== 'number') return;
+        cartRemoveItemMutation.mutate({ "cartId": user?.cartId, "removedCartItemId": cartItemId });
+        setCart((cart) => { return cart.filter((item) => item?.id !== cartItemId) });
         console.log("Done");
     }
 
@@ -102,19 +77,23 @@ export default function ChartContextProvider({ children }) {
     }
 
     const itemCheckHandler = (cartItemId, checked) => {
-        if(typeof checked !== 'boolean') return;
-        setCart((cart)=>{return cart.map((item)=>{
-            if(item?.id === cartItemId) item.checked = checked;
-            return item;
-        })})
+        if (typeof checked !== 'boolean') return;
+        setCart((cart) => {
+            return cart.map((item) => {
+                if (item?.id === cartItemId) item.checked = checked;
+                return item;
+            })
+        })
     }
 
     const changeChartItemQuantity = (cartItemId, jumlah) => {
-        if(typeof jumlah !== 'number') return;
-        setCart((cart)=>{return cart.map((item)=>{
-            if(item?.id === cartItemId) item.jumlah = jumlah;
-            return item;
-        })})
+        if (typeof jumlah !== 'number') return;
+        setCart((cart) => {
+            return cart.map((item) => {
+                if (item?.id === cartItemId) item.jumlah = jumlah;
+                return item;
+            })
+        })
     }
 
     const initializeItems = async () => {
@@ -133,7 +112,7 @@ export default function ChartContextProvider({ children }) {
     return (
         <ChartContext.Provider value={{ cart, totalChartPrice, removeItem, itemCheckHandler, changeChartItemQuantity }}>
             {
-                detailedItemsFetchStatus === 'fetching' || userFetchStatus === 'fetching' || itemFetchStatus === 'fetching' || loginFetchStatus === 'fetchin' ?
+                detailedItemsFetchStatus === 'fetching' || itemFetchStatus === 'fetching' ?
                     <FullscreeLoading />
                     :
                     children

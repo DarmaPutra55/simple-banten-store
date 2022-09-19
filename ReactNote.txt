@@ -20,7 +20,7 @@ Example:
 const text = j.join(", "); => text will contain string noita, gundam, gumblar.
 
 
-+To get value from a Form, use useState() and do this:
++To get value from a Form, use useState() and do this: //This is for BOOTSTRAP!
 <form onSubmit={ e => {submit(e)}}>
   <Form.Control 
 	type="text" 
@@ -203,3 +203,14 @@ return({
 +You can also use allias on destructed object by doing this: { data : newDataAllias } = object //data can be accessed with newDataAllias.
 
 +Promise and array.reduce() did not mix well. AVOID USING ARRAY.REDUCE() WITH PROMISE!
+
++FormControl should be used to only wrap a single input.
+Example
+<form>
+	<FormControl>
+		<Input type={"email"} placeholder={"This is for email"} />
+	</FormControl>
+	<FormControl>
+		<Input type={"password"} placeholder={"This is for password"} />
+	</FormControl>
+</form>
