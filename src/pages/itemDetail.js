@@ -1,6 +1,7 @@
-import { Stack, Text, Flex, useBoolean } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { Stack, Text, Flex, useBoolean, Button, HStack } from "@chakra-ui/react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { MessageSquare } from "react-feather"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
 import Loading from "../components/smallcomponent/loading/loading";
 import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDetailHeader";
@@ -8,6 +9,7 @@ import ItemDetailInformation from "../components/itemDetail/itemDetailInformatio
 import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
 import SearchBar from "../components/searchbar/searchbar";
 import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
+import ActionIcon from "../components/smallcomponent/icons/icon";
 
 export default function ItemDetail() {
     const params = useParams();
@@ -71,6 +73,11 @@ export default function ItemDetail() {
                             itemId={itemDetail.id}
                             kategori={itemDetail.kategori}
                         />
+
+                        <HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"} width={"100vw"}>
+                            <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
+                            <Flex justify={"center"} ><ActionIcon icon={<MessageSquare />}/></Flex>
+                        </HStack>
 
                     </Stack>
             }

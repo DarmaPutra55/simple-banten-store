@@ -214,3 +214,10 @@ Example
 		<Input type={"password"} placeholder={"This is for password"} />
 	</FormControl>
 </form>
+
++To make an element stick to the bottom of a page, use postion "sticky" with bottom and left set to 0 //WARNING: I am not sure why this is working.
+Example:
+<HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"} width={"100vw"}>
+	<Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
+	<Flex justify={"center"} ><ActionIcon icon={<MessageSquare />}/></Flex>
+</HStack>
