@@ -11,12 +11,12 @@ export default function LoginForm({setUsername, setPassword, loginFormSubmitHand
                 <Stack w={'full'} gap={"2"}>
                     <Flex justify={"center"}><Text fontWeight={"bold"} fontSize={"2xl"}>Login</Text></Flex>
                     <FormControl>
-                        <Input type={"text"} placeholder={"Username"} onChange={(e) => {
+                        <Input type={"text"} placeholder={"Username"} required={true} isRequired={true} onChange={(e) => {
                             setUsername(e.target.value)
                         }} />
                     </FormControl>
                     <FormControl>
-                        <Input type={"password"} placeholder={"Password"} onChange={(e) => {
+                        <Input type={"password"} placeholder={"Password"} required={true} isRequired={true} onChange={(e) => {
                             setPassword(e.target.value)
                         }} />
                     </FormControl>

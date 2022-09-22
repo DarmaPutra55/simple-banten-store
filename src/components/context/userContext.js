@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { serializeError } from "serialize-error";
 import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
@@ -10,7 +12,8 @@ export const UserContext = createContext();
 
 
 export default function UserContextProvider({ children }) {
-    const queryClient = useQueryClient()
+    let navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { data: user, fetchStatus: userFetchStatus } = useQuery(["fetchUser"], async ()=>{
         return await fetchApi("/login", {
             credentials: 'include',
@@ -19,9 +22,8 @@ export default function UserContextProvider({ children }) {
         retry: false
     })
 
-    const loginMutation = useMutation(({email, username, password})=>{
+    const loginMutation = useMutation(({username, password})=>{
         const loginForm = JSON.stringify({
-            "email": email,
             "username": username,
             "password": password
         })
@@ -37,7 +39,8 @@ export default function UserContextProvider({ children }) {
     }, {
         retry: false,
         onSuccess: ()=>{
-            queryClient.invalidateQueries(['fetchUser'])
+            queryClient.invalidateQueries(['fetchUser']);
+            navigate("/");
         }
     })
 
@@ -59,12 +62,13 @@ export default function UserContextProvider({ children }) {
     }, {
         retry: false,
         onSuccess: ()=>{
-            queryClient.invalidateQueries(['fetchUser'])
+            queryClient.invalidateQueries(['fetchUser']);
+            navigate("/");
         }
     })
 
-    const login = (email, username, password) =>{
-        loginMutation.mutate({email, username, password});
+    const login = (username, password) =>{
+        loginMutation.mutate({username, password});
     }
 
     const register = (email, username, password) =>{
