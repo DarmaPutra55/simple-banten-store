@@ -6,6 +6,7 @@ import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
 import Item from "../item/item";
+import { useToast } from "@chakra-ui/react";
 
 
 export const UserContext = createContext();
@@ -13,6 +14,7 @@ export const UserContext = createContext();
 
 export default function UserContextProvider({ children }) {
     let navigate = useNavigate();
+    const toast = useToast();
     const queryClient = useQueryClient();
     const { data: user, fetchStatus: userFetchStatus } = useQuery(["fetchUser"], async ()=>{
         return await fetchApi("/login", {
@@ -39,8 +41,24 @@ export default function UserContextProvider({ children }) {
     }, {
         retry: false,
         onSuccess: ()=>{
+            toast({
+                title: "Berhasil login",
+                description: "Selamat datang kembali.",
+                status: 'success',
+                duration: 4000,
+                isClosable: true,
+            });
             queryClient.invalidateQueries(['fetchUser']);
             navigate("/");
+        },
+        onError: ()=>{
+            toast({
+                title: "Gagal login",
+                description: "Pengguna tidak ditemukan.",
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            });
         }
     })
 
@@ -62,8 +80,24 @@ export default function UserContextProvider({ children }) {
     }, {
         retry: false,
         onSuccess: ()=>{
+            toast({
+                title: "Akun berhasil dibuat",
+                description: "Terimakasi telah bergabung dengan kami.",
+                status: 'success',
+                duration: 4000,
+                isClosable: true,
+            });
             queryClient.invalidateQueries(['fetchUser']);
             navigate("/");
+        },
+        onError: ()=>{
+            toast({
+                title: "Gagal registrasi",
+                description: "Terjadi kesalahan saat melakukan registrasi.",
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            });
         }
     })
 
