@@ -61,6 +61,13 @@ export default function ChartContextProvider({ children }) {
         });
     })
 
+    const cartAddItemMutation = useMutation(({itemId, itemQuantity}) =>{
+        return fetchApi("/carts/"+ user?.cartId, {
+            credentials: 'include',
+            method: "POST"
+        })
+    })
+
     const removeItem = (cartItemId) => {
         if (typeof cartItemId !== 'number') return;
         cartRemoveItemMutation.mutate({ "cartId": user?.cartId, "removedCartItemId": cartItemId });

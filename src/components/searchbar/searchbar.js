@@ -109,18 +109,11 @@ export default function SearchBar() {
                     as={ReactLink}
                     to={"/login"}
                 >
-                    <Flex
-                        p={"4px"}
-                        position={"relative"}
-                        h={"100%"}
-                        alignContent={"center"}
-                    >
-                        <ActionIcon
-                            size={"sm"}
-                            label={"User"}
-                            icon={<User />}
-                        />
-                    </Flex>
+                    <ActionIcon
+                        size={"sm"}
+                        label={"User"}
+                        icon={<User />}
+                    />
                 </Link>
             </Flex>
         </Flex>

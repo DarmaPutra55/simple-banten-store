@@ -1,10 +1,10 @@
 import { Stack, Flex, Checkbox, Heading, Text, HStack, Link, Image, useDisclosure } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom';
 import { Trash } from "react-feather";
-import { useItemQuantity } from "./chartItemQuantityManager/itemQuantityHooks";
+import { useItemQuantity } from "../smallcomponent/itemQuantityManager/itemQuantityHooks";
 import { useContext, useEffect, useState } from 'react';
 import { ChartContext } from '../context/chartContext';
-import ChartItemQuantitiyManager from './chartItemQuantityManager/chartItemQuantityManager';
+import ItemQuantitiyManager from '../smallcomponent/itemQuantityManager/itemQuantityManager';
 import ActionIcon from "../../components/smallcomponent/icons/icon";
 import AlertDialog from '../alertDialog/alertDialog';
 import CurrencyFormatter from "../../components/smallcomponent/currencyFormatter/currencyFormatter"
@@ -22,6 +22,23 @@ export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jum
 
     const trashClickHandler = () => {
         onOpen();
+    }
+
+    const inputChangeHandler = (e) => {
+        setItemBought(e.target.value);
+    }
+
+    const plusChangeHandler = () => {
+        setItemBought(itemBought+1);
+    }
+
+    const minusChangeHandler = () => {
+        if(itemBought === 1){
+            onOpen()
+        }
+        else{
+            setItemBought(itemBought-1);
+        }
     }
     
     useEffect(()=>{
@@ -82,10 +99,12 @@ export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jum
                         <HStack
                             spacing={"15px"}
                         >
-                            <ChartItemQuantitiyManager 
-                                onOpen={onOpen}
+                            <ItemQuantitiyManager 
                                 itemQuantity={itemBought}
                                 setItemQuantity={setItemBought}
+                                inputChangeHandler={inputChangeHandler}
+                                plusChangeHandler={plusChangeHandler}
+                                minusChangeHandler={minusChangeHandler}
                             />
                             <Text
                                 fontSize={"sm"}

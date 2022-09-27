@@ -1,5 +1,6 @@
 import { Stack, Text, Flex, useBoolean, Button, HStack } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
+import { useDisclosure } from '@chakra-ui/react'
 import { useParams } from "react-router-dom";
 import { MessageSquare } from "react-feather"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
@@ -10,9 +11,11 @@ import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
 import SearchBar from "../components/searchbar/searchbar";
 import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
 import ActionIcon from "../components/smallcomponent/icons/icon";
+import BuyModal from "../components/buyModal/buyModal";
 
 export default function ItemDetail() {
     const params = useParams();
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const [itemDetail, setItemDetail] = useState({});
     const [isLoading, setIsLoading] = useBoolean(true);
 
@@ -51,6 +54,7 @@ export default function ItemDetail() {
                             className={"responsiveWidth"}
                             spacing={"18px"}
                         >
+                            <BuyModal productName={itemDetail.nama} productImg={itemDetail.gambar} productStok={itemDetail.stok} isOpen={isOpen} onClose={onClose}/>
                             <ItemDetailHeader
                                 img={itemDetail.gambar}
                                 name={itemDetail.nama}
@@ -73,7 +77,7 @@ export default function ItemDetail() {
                                 kategori={itemDetail.kategori}
                             />
                             <HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"}>
-                                <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
+                                <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"} onClick={onOpen}>Beli</Button>
                                 <Flex minW={"10%"} justify={"center"} ><ActionIcon icon={<MessageSquare />} /></Flex>
                             </HStack>
                         </Stack>
