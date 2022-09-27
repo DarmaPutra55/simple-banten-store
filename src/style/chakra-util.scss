@@ -3,13 +3,13 @@
 }
 
 .responsiveWidth {
-    width: 100vw;
-    max-width: calc(min(1100px, 100vw));
+    width: 100%;
+    max-width: calc(min(1100px, 100%));
 }
 
 .responsiveWidthSmaller {
-    width: 100vw;
-    max-width: calc(min(800px, 100vw));
+    width: 100%;
+    max-width: calc(min(800px, 100%));
 }
 
 .invisibleScrollbar {

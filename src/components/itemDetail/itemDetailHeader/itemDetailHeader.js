@@ -28,13 +28,13 @@ export default function ItemDetailHeader(props){
     }
 
     return(
-        <Box backgroundColor={"white"} overflowY={"hidden"}>
+        <Box backgroundColor={"white"} overflowY={"hidden"} p={"15px"}>
                 <Image
                     fit={"contain"}
                     maxW={["100%", "400px", "400px"]}
                     maxH={["100%", "400px", "400px"]}
-                    w={"100vw"}
-                    h={"100vw"}
+                    w={"100%"}
+                    h={"100%"}
                     src={props.img}
                 />
                 <Stack p={"2"} spacing={"4px"}>

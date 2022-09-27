@@ -18,7 +18,7 @@ export default function ItemDetailInformation(props){
     }, []);
 
     return (
-        <Box backgroundColor={"white"} overflowY={"hidden" }>
+        <Box backgroundColor={"white"} overflowY={"hidden" } p={"15px"}>
                 <Stack p={"2"}>
                     <Heading size={"md"}>
                         Informasi Barang

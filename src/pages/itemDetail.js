@@ -34,7 +34,7 @@ export default function ItemDetail() {
     }, [])
 
     return (
-        <Stack align={"center"}  backgroundColor={"gray.100"}>
+        <Stack align={"center"} backgroundColor={"gray.100"} minW={"100%"}>
             <SearchBar />
             {isLoading ?
                 <Loading />
@@ -48,40 +48,35 @@ export default function ItemDetail() {
                     :
                     <>
                         <Stack
-                            minH={"100vh"}
+                            className={"responsiveWidth"}
                             spacing={"18px"}
                         >
-                            <Stack
-                                className={"responsiveWidth"}
-                            >
-                                <ItemDetailHeader
-                                    img={itemDetail.gambar}
-                                    name={itemDetail.nama}
-                                    rating={itemDetail.rating.rate}
-                                    price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon) / 100))) : CurrencyFormatter(itemDetail.harga)}
-                                    originalPrice={CurrencyFormatter(itemDetail.harga)}
-                                    discount={itemDetail.diskon}
-                                    ulasan={itemDetail.ulasan} // Make rest api include ulasan!
-                                />
+                            <ItemDetailHeader
+                                img={itemDetail.gambar}
+                                name={itemDetail.nama}
+                                rating={itemDetail.rating.rate}
+                                price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon) / 100))) : CurrencyFormatter(itemDetail.harga)}
+                                originalPrice={CurrencyFormatter(itemDetail.harga)}
+                                discount={itemDetail.diskon}
+                                ulasan={itemDetail.ulasan} // Make rest api include ulasan!
+                            />
 
-                                <ItemDetailInformation
-                                    kategori={itemDetail.kategori}
-                                    stock={itemDetail.stok}
-                                    sold={itemDetail.terjual}
-                                    description={itemDetail.deskripsi}
-                                />
+                            <ItemDetailInformation
+                                kategori={itemDetail.kategori}
+                                stock={itemDetail.stok}
+                                sold={itemDetail.terjual}
+                                description={itemDetail.deskripsi}
+                            />
 
-                                <ItemMoreLikeThis
-                                    itemId={itemDetail.id}
-                                    kategori={itemDetail.kategori}
-                                />
-                            </Stack>
-
+                            <ItemMoreLikeThis
+                                itemId={itemDetail.id}
+                                kategori={itemDetail.kategori}
+                            />
+                            <HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"}>
+                                <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
+                                <Flex minW={"10%"} justify={"center"} ><ActionIcon icon={<MessageSquare />} /></Flex>
+                            </HStack>
                         </Stack>
-                        <HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"} width={"100vw"}>
-                            <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
-                            <Flex minW={"10vw"} justify={"center"} ><ActionIcon icon={<MessageSquare />} /></Flex>
-                        </HStack>
                     </>
             }
         </Stack>

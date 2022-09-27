@@ -17,7 +17,7 @@ export default function SearchBar() {
 
     return (
         <Flex
-            width={"100vw"}
+            width={"100%"}
             p={"10px"}
             shadow={"sm"}
             position={"sticky"}

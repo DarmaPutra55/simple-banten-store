@@ -14,7 +14,7 @@ export default function MainSale(){
         return searchParamsMap;
     }
     return(
-        <Stack>
+        <Stack minW={"100%"}>
             <SearchBar />
             <ItemArea searchParams = { getParams() }/>
         </Stack>

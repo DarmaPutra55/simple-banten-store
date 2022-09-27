@@ -1,4 +1,4 @@
-import { Flex, Heading, Stack, Box, Text, Button, useBoolean} from "@chakra-ui/react";
+import { Flex, Heading, Stack, Box, Text, Button, useBoolean } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import SearchBar from "../components/searchbar/searchbar";
 import ChartItem from "../components/chartItem/chartItem";
@@ -7,36 +7,39 @@ import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/cu
 import { ChartContext } from "../components/context/chartContext";
 
 
-export default function Chart(){
+export default function Chart() {
     const [isLoading, setIsLoading] = useBoolean(true);
-    const {totalChartPrice, cart} = useContext(ChartContext);
+    const { totalChartPrice, cart } = useContext(ChartContext);
 
-    return(
+    return (
         <Stack
             bg={"gray.100"}
+            minW={"100%"}
+            align={"center"}
         >
             <SearchBar />
+            <Stack className={"responsiveWidth"}>
                 <Flex
                     bgColor={"white"}
                     align={"center"}
                     justify={"center"}
                 >
-                    <Heading 
+                    <Heading
                         py={"10px"}
                         as={"h1"}
-                        fontSize={"1.1em"} 
+                        fontSize={"1.1em"}
                     >
                         Keranjang Belanja
                     </Heading>
                 </Flex>
 
                 {
-                    cart?.length > 0 ? Array(cart.length).fill(' ').map((_, i)=>{
-                        return <ChartItem key={i} 
+                    cart?.length > 0 ? Array(cart.length).fill(' ').map((_, i) => {
+                        return <ChartItem key={i}
                             {...cart[i]}
                         />
                     })
-                    : ""
+                        : ""
                 }
 
                 <Flex
@@ -46,16 +49,16 @@ export default function Chart(){
                 >
                     <Stack
                         spacing={"2px"}
-                    >  
+                    >
                         <Box
-                        
+
                         >
                             <Text
                                 color={"gray.400"}
                             >
                                 Total Belanja
                             </Text>
-                            <Heading 
+                            <Heading
                                 as={"h1"}
                                 fontSize={"1.6em"}
                             >
@@ -77,6 +80,7 @@ export default function Chart(){
                         </Button>
                     </Flex>
                 </Flex>
+            </Stack>
         </Stack>
     );
 }
