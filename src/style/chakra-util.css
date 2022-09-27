@@ -1,4 +1,18 @@
 .ratioSame {
   aspect-ratio: 1;
 }
+
+.responsiveWidth {
+  width: 100vw;
+  max-width: calc(min(1100px, 100vw));
+}
+
+.responsiveWidthSmaller {
+  width: 100vw;
+  max-width: calc(min(800px, 100vw));
+}
+
+.invisibleScrollbar {
+  scrollbar-width: none;
+}
 /*# sourceMappingURL=chakra-util.css.map */

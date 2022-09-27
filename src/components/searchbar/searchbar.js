@@ -17,107 +17,112 @@ export default function SearchBar() {
 
     return (
         <Flex
+            width={"100vw"}
             p={"10px"}
-            minW={"100vw"}
-            justify={"space-between"}
             shadow={"sm"}
             position={"sticky"}
             top={"0"}
             left={"0"}
             bgColor={"white"}
+            justify={"center"}
             zIndex={"100"}
         >
-            <Link
-                as={ReactLink}
-                to={"/"}
-                h={"100%"}
+            <Flex
+                className={"responsiveWidth"}
+                justify={"space-between"}
             >
-                <Flex
+                <Link
+                    as={ReactLink}
+                    to={"/"}
                     h={"100%"}
-                    align={"center"}
-                    justify={"center"}
                 >
-                    <Heading
-                        as={"h1"}
-                        fontSize={"1.1em"}
-                        pr={2}
-                    >
-                        BanStore
-                    </Heading>
-                </Flex>
-            </Link>
-            <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    navigate(searchText ? "/?itemName=" + searchText : "/", { replace: true });
-                }}>
-                    <InputGroup pr={2}>
-                        <InputLeftElement
-                            pointerEvents='none'
-                            children={
-                                <Search color='grey' size={20} />
-                            }
-                        />
-                        <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e) => { setSearchText(e.target.value) }} />
-                    </InputGroup>
-                </form>
-            </Box>
-            <Link
-                as={ReactLink}
-                to={"/chart"}
-            >
-                <Flex
-                    p={"4px"}
-                    position={"relative"}
-                    h={"100%"}
-                    alignContent={"center"}
-                >
-                    <Center>
-                        <Icon
-                            label={"Shopping chart"}
-                            as={ShoppingCart}
-                            boxSize={6}
-                        />
-                    </Center>
                     <Flex
-                        w={"15px"}
-                        h={"15px"}
-                        position={"absolute"}
-                        bottom={"0"}
-                        right={"0"}
-                        display={cartCheckedItemCount > 0 ? "flex" : "none"}
-                        bgColor={"red"}
-                        borderRadius={"13px"}
+                        h={"100%"}
+                        align={"center"}
                         justify={"center"}
                     >
-                        <Text
-                            p={0}
-                            fontSize={"10px"}
-                            fontWeight={"bold"}
-                            color={"white"}
+                        <Heading
+                            as={"h1"}
+                            fontSize={"1.1em"}
+                            pr={2}
                         >
-                            {cartCheckedItemCount}
-                        </Text>
+                            BanStore
+                        </Heading>
                     </Flex>
-                </Flex>
-            </Link>
-            <Link
-                as={ReactLink}
-                to={"/login"}
-            >
-                <Flex
-                    p={"4px"}
-                    position={"relative"}
-                    h={"100%"}
-                    alignContent={"center"}
+                </Link>
+                <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        navigate(searchText ? "/?itemName=" + searchText : "/", { replace: true });
+                    }}>
+                        <InputGroup pr={2}>
+                            <InputLeftElement
+                                pointerEvents='none'
+                                children={
+                                    <Search color='grey' size={20} />
+                                }
+                            />
+                            <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e) => { setSearchText(e.target.value) }} />
+                        </InputGroup>
+                    </form>
+                </Box>
+                <Link
+                    as={ReactLink}
+                    to={"/chart"}
                 >
-                    <ActionIcon
-                        size={"sm"}
-                        label={"User"}
-                        icon={<User />}
-                    />
-                </Flex>
-            </Link>
+                    <Flex
+                        p={"4px"}
+                        position={"relative"}
+                        h={"100%"}
+                        alignContent={"center"}
+                    >
+                        <Center>
+                            <Icon
+                                label={"Shopping chart"}
+                                as={ShoppingCart}
+                                boxSize={6}
+                            />
+                        </Center>
+                        <Flex
+                            w={"15px"}
+                            h={"15px"}
+                            position={"absolute"}
+                            bottom={"0"}
+                            right={"0"}
+                            display={cartCheckedItemCount > 0 ? "flex" : "none"}
+                            bgColor={"red"}
+                            borderRadius={"13px"}
+                            justify={"center"}
+                        >
+                            <Text
+                                p={0}
+                                fontSize={"10px"}
+                                fontWeight={"bold"}
+                                color={"white"}
+                            >
+                                {cartCheckedItemCount}
+                            </Text>
+                        </Flex>
+                    </Flex>
+                </Link>
+                <Link
+                    as={ReactLink}
+                    to={"/login"}
+                >
+                    <Flex
+                        p={"4px"}
+                        position={"relative"}
+                        h={"100%"}
+                        alignContent={"center"}
+                    >
+                        <ActionIcon
+                            size={"sm"}
+                            label={"User"}
+                            icon={<User />}
+                        />
+                    </Flex>
+                </Link>
+            </Flex>
         </Flex>
     );
 }

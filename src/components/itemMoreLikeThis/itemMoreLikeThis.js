@@ -47,6 +47,7 @@ export default function ItemMoreLikeThis(props) {
     return (
         items.length > 0 ?
             <Flex
+                className={"invisibleScrollbar"}
                 flexWrap={"nowrap"}
                 maxW={"100vw"}
                 overflowX={"scroll"}

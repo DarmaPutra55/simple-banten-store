@@ -34,7 +34,7 @@ export default function ItemDetail() {
     }, [])
 
     return (
-        <Stack>
+        <Stack align={"center"}  backgroundColor={"gray.100"}>
             <SearchBar />
             {isLoading ?
                 <Loading />
@@ -46,40 +46,43 @@ export default function ItemDetail() {
                         </Text>
                     </Flex>
                     :
-                    <Stack
-                        minH={"100vh"}
-                        backgroundColor={"gray.100"}
-                        spacing={"18px"}
-                        maxW={"100vw"}
-                    >
-                        <ItemDetailHeader
-                            img={itemDetail.gambar}
-                            name={itemDetail.nama}
-                            rating={itemDetail.rating.rate}
-                            price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon) / 100))) : CurrencyFormatter(itemDetail.harga)}
-                            originalPrice={CurrencyFormatter(itemDetail.harga)}
-                            discount={itemDetail.diskon}
-                            ulasan={itemDetail.ulasan} // Make rest api include ulasan!
-                        />
+                    <>
+                        <Stack
+                            minH={"100vh"}
+                            spacing={"18px"}
+                        >
+                            <Stack
+                                className={"responsiveWidth"}
+                            >
+                                <ItemDetailHeader
+                                    img={itemDetail.gambar}
+                                    name={itemDetail.nama}
+                                    rating={itemDetail.rating.rate}
+                                    price={itemDetail.diskon ? CurrencyFormatter((itemDetail.harga - (Math.round(itemDetail.harga * itemDetail.diskon) / 100))) : CurrencyFormatter(itemDetail.harga)}
+                                    originalPrice={CurrencyFormatter(itemDetail.harga)}
+                                    discount={itemDetail.diskon}
+                                    ulasan={itemDetail.ulasan} // Make rest api include ulasan!
+                                />
 
-                        <ItemDetailInformation
-                            kategori={itemDetail.kategori}
-                            stock={itemDetail.stok}
-                            sold={itemDetail.terjual}
-                            description={itemDetail.deskripsi}
-                        />
+                                <ItemDetailInformation
+                                    kategori={itemDetail.kategori}
+                                    stock={itemDetail.stok}
+                                    sold={itemDetail.terjual}
+                                    description={itemDetail.deskripsi}
+                                />
 
-                        <ItemMoreLikeThis
-                            itemId={itemDetail.id}
-                            kategori={itemDetail.kategori}
-                        />
+                                <ItemMoreLikeThis
+                                    itemId={itemDetail.id}
+                                    kategori={itemDetail.kategori}
+                                />
+                            </Stack>
 
+                        </Stack>
                         <HStack bgColor={"white"} padding={"5px"} position={"sticky"} bottom={"0px"} left={"0px"} width={"100vw"}>
                             <Button borderRadius={"0px"} colorScheme={"green"} flexGrow={"2"}>Beli</Button>
-                            <Flex justify={"center"} ><ActionIcon icon={<MessageSquare />}/></Flex>
+                            <Flex minW={"10vw"} justify={"center"} ><ActionIcon icon={<MessageSquare />} /></Flex>
                         </HStack>
-
-                    </Stack>
+                    </>
             }
         </Stack>
     );

@@ -30,7 +30,7 @@ export default function SignIn() {
     return (
         <Stack bgColor={"gray.100"} align={"center"}>
             <SearchBar />
-            <Stack gap={"0px"} bgColor={"white"} p={"25px"} maxW={(Math.min(800, window.innerWidth) + "px")} w={'full'}>
+            <Stack gap={"0px"} bgColor={"white"} p={"25px"} w={'full'} className={"responsiveWidthSmaller"}>
                 <ButtonGroup spacing={"0px"}>
                     <Button isActive={acessLink ? true : false} flexGrow={"1"} borderRadius={"0px"} onClick={(e)=>{
                         clearState();

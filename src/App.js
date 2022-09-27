@@ -6,7 +6,8 @@ import Chart from "./pages/chart";
 import SignIn from "./pages/signIn";
 import ChartContextProvider from "./components/context/chartContext";
 import UserContextProvider from "./components/context/userContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./style/chakra-util.css";
 
 function App() {
   const queryClient = new QueryClient();
