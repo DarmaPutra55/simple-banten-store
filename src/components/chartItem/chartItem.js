@@ -2,21 +2,22 @@ import { Stack, Flex, Checkbox, Heading, Text, HStack, Link, Image, useDisclosur
 import { Link as RouterLink } from 'react-router-dom';
 import { Trash } from "react-feather";
 import { useItemQuantity } from "../smallcomponent/itemQuantityManager/itemQuantityHooks";
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ChartContext } from '../context/chartContext';
 import ItemQuantitiyManager from '../smallcomponent/itemQuantityManager/itemQuantityManager';
 import ActionIcon from "../../components/smallcomponent/icons/icon";
 import AlertDialog from '../alertDialog/alertDialog';
 import CurrencyFormatter from "../../components/smallcomponent/currencyFormatter/currencyFormatter"
 
-export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jumlah, checked}){
+export default function ChartItem({ id, id_barang, gambar, nama, stok, harga, jumlah, checked }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [itemBought, setItemBought] = useItemQuantity(jumlah, stok);
     const [itemChecked, setItemChecked] = useState(checked);
     const [totalPrice, setTotalPrice] = useState(0);
-    const {changeChartItemQuantity, itemCheckHandler} = useContext(ChartContext);
+    const { updateCartItemHandler } = useContext(ChartContext);
+    let firstRender = useRef(true);
 
-    const checkClickHandler = () =>{
+    const checkClickHandler = () => {
         setItemChecked(!itemChecked);
     }
 
@@ -29,120 +30,120 @@ export default function ChartItem({id, id_barang, gambar, nama, stok, harga, jum
     }
 
     const plusChangeHandler = () => {
-        setItemBought(itemBought+1);
+        setItemBought(itemBought + 1);
     }
 
     const minusChangeHandler = () => {
-        if(itemBought === 1){
+        if (itemBought === 1) {
             onOpen()
         }
-        else{
-            setItemBought(itemBought-1);
+        else {
+            setItemBought(itemBought - 1);
         }
     }
-    
-    useEffect(()=>{
+   
+    useEffect(() => {
         setTotalPrice(harga * itemBought);
     }, [itemBought, harga])
 
-    useEffect(()=>{
-        changeChartItemQuantity(id, itemBought);
-    }, [itemBought])
+    useEffect(() => {
+        firstRender.current ? firstRender.current = false : updateCartItemHandler(id, id_barang, itemBought, itemChecked);
+    }, [itemBought, itemChecked])
 
-    useEffect(()=>{
-        itemCheckHandler(id, itemChecked)
-    }, [itemChecked])
 
-    return(
-            <Stack
-                py={"8px"}
-                px={"10px"}
-                bgColor={"white"}
+    return (
+        <Stack
+            py={"8px"}
+            px={"10px"}
+            bgColor={"white"}
+        >
+            <AlertDialog
+                chartItemId={id}
+                isOpen={isOpen}
+                onClose={onClose}
+            />
+
+            <HStack
+                spacing={"8px"}
             >
-                <AlertDialog
-                    chartItemId={id}
-                    isOpen={isOpen}
-                    onClose={onClose}
-                />
-
-                <HStack
-                    spacing={"8px"}
+                <Flex
+                    align={"flex-start"}
+                    h={"65%"}
                 >
-                    <Flex
-                        align={"flex-start"}
-                        h={"65%"}
-                    >
-                        <Checkbox 
-                            isChecked={itemChecked}
-                            onChange={checkClickHandler}
-                        />
-                    </Flex>
+                    <Checkbox
+                        isChecked={itemChecked}
+                        onChange={checkClickHandler}
+                    />
+                </Flex>
+                <Stack
+                    spacing={"8px"}
+                    flex={"3"}
+                >
                     <Stack
-                        spacing={"8px"}
-                        flex={"3"}
+                        spacing={"2px"}
                     >
-                        <Stack
-                            spacing={"2px"}
+                        <Text
+                            fontSize={"sm"}
                         >
-                            <Text
-                                fontSize={"sm"}
-                            >
-                                {nama}
-                            </Text>
-                            <Heading 
-                                as={"h2"}
-                                fontSize={"md"}
-                            >
-                                {CurrencyFormatter(totalPrice)}
-                            </Heading>
-                        </Stack>
-                        <HStack
-                            spacing={"15px"}
+                            {nama}
+                        </Text>
+                        <Heading
+                            as={"h2"}
+                            fontSize={"md"}
                         >
-                            <ItemQuantitiyManager 
-                                itemQuantity={itemBought}
-                                setItemQuantity={setItemBought}
-                                inputChangeHandler={inputChangeHandler}
-                                plusChangeHandler={plusChangeHandler}
-                                minusChangeHandler={minusChangeHandler}
-                            />
-                            <Text
-                                fontSize={"sm"}
-                                color={"red.400"}
-                            >
-                                Stok tinggal {stok}
-                            </Text>
-                        </HStack>
+                            {CurrencyFormatter(totalPrice)}
+                        </Heading>
                     </Stack>
-                    <Stack
-                        spacing={"20px"}
-                        flex={"1"}
+                    <HStack
+                        spacing={"15px"}
                     >
-                        <Link
-                            as={RouterLink}
-                            to={"/item/"+id_barang}
+                        <ItemQuantitiyManager
+                            itemQuantity={itemBought}
+                            setItemQuantity={setItemBought}
+                            inputChangeHandler={inputChangeHandler}
+                            plusChangeHandler={plusChangeHandler}
+                            minusChangeHandler={minusChangeHandler}
+                        />
+                        <Text
+                            fontSize={"sm"}
+                            color={"red.400"}
                         >
-                            <Flex
-                                align={"center"}
-                                justify={"center"}
-                            >
-                                <Image
-                                    fit={"contain"}
-                                    w={"80px"}
-                                    h={"80px"}
-                                    src={gambar}
-                                    alt={"Sorry"}
-                                />
-                            </Flex>
-                        </Link>
+                            Stok tinggal {stok}
+                        </Text>
+                    </HStack>
+                </Stack>
+                <Stack
+                    spacing={"20px"}
+                    flex={"1"}
+                >
+                    <Link
+                        as={RouterLink}
+                        to={"/item/" + id_barang}
+                    >
+                        <Flex
+                            align={"center"}
+                            justify={"center"}
+                        >
+                            <Image
+                                fit={"contain"}
+                                w={"80px"}
+                                h={"80px"}
+                                src={gambar}
+                                alt={"Sorry"}
+                            />
+                        </Flex>
+                    </Link>
+                    <Flex w={"100%"} justify={"center"}>
                         <ActionIcon
                             size={"sm"}
                             label={"Item Trash"}
                             icon={<Trash />}
                             onClick={trashClickHandler}
                         />
-                    </Stack>
-                </HStack>
-            </Stack>
+                    </Flex>
+
+                </Stack>
+            </HStack>
+        </Stack>
     );
 }

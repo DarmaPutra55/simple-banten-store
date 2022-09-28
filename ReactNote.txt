@@ -224,3 +224,31 @@ Example:
 
 
 +Don't use VW for min width or max width if there is a vertical scroll. It will cause an overflow. Instead use 100% for min or max width. This is because VW also include scroll.
+
++When using useMutation to update a data, it better to use setQuery or setQueries to update data in client instead of refetching everything. It better to do this in onSuccess or onError.
+Example:
+queryClient.setQueriesData(["item"+data.id], newItemDetail); // You will also need to use useQueryClient. ALSO THE NEW DATA MUST MATCH THE OLD DATA.
+
++It better to use useQueries instead for multiple query instead of bundling them all in a single promise so that when you update you can also update the old fetched data.
+Example:
+const detailedItems = useQueries({
+        queries: items? items.table_cart_barang.map((item)=>{ //Check if items exist, if not then queries will be empty array.
+            return {
+                queryKey: ["item"+item.id], //For the key
+                queryFn: async ()=>{ //Accept callback
+                    const detailedItem = await fetchApi('/products/' + item.id_barang);
+                    item.gambar = detailedItem.gambar
+                    item.nama = detailedItem.nama;
+                    item.stok = detailedItem.stok;
+                    item.harga = detailedItem.harga;
+                    return item;
+                },
+
+                enabled: items?.id > 0 ? true : false, //You can add option here like onSuccess, onError, etc...
+            }
+        }) : []
+    })
+
+const detailedItemsFetchStatus = detailedItems.some(result => result.fetchStatus === "fetching") //Check if any of the member is still fetching.
+
++Use update instead of patch.

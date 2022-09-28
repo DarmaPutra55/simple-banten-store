@@ -1,4 +1,4 @@
-import { Flex, useBoolean } from "@chakra-ui/react";
+import { Flex, useBoolean, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CurrencyFormatter from "../smallcomponent/currencyFormatter/currencyFormatter"
 import Loading from "../smallcomponent/loading/loading";
@@ -66,6 +66,7 @@ export default function ItemArea(props) {
                         justify={["baseline", "baseline", "center"]}
                     >
                         {
+                            items.length > 0 ?
                             Array(items.length).fill('').map((_, i) => {
                                 return <Item
                                     key={i}
@@ -79,6 +80,10 @@ export default function ItemArea(props) {
                                     sold={items[i].sold}
                                 />;
                             })
+                            :
+                            <Flex minWidth={"100%"} justify={"center"}>
+                                <Text>Tidak ada barang yang ditemukan</Text>
+                            </Flex>
                         }
                     </Flex>
             }

@@ -9,8 +9,8 @@ import { ChartContext } from '../context/chartContext';
 export default function SearchBar() {
     const [searchText, setSearchText] = useState("");
     const [searchParams] = useSearchParams();
-    const { cart } = useContext(ChartContext);
-    const cartCheckedItemCount = cart?.length > 0 ? cart.filter((item) => item.checked).length : 0;
+    const { detailedItems } = useContext(ChartContext);
+    const cartCheckedItemCount = detailedItems?.length > 0 ? detailedItems.filter((item) => item.data.checked).length : 0;
     const navigate = useNavigate();
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.

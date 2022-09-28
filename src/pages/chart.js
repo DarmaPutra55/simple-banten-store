@@ -8,8 +8,7 @@ import { ChartContext } from "../components/context/chartContext";
 
 
 export default function Chart() {
-    const [isLoading, setIsLoading] = useBoolean(true);
-    const { totalChartPrice, cart } = useContext(ChartContext);
+    const { totalChartPrice, detailedItems } = useContext(ChartContext);
 
     return (
         <Stack
@@ -34,9 +33,9 @@ export default function Chart() {
                 </Flex>
 
                 {
-                    cart?.length > 0 ? Array(cart.length).fill(' ').map((_, i) => {
+                    detailedItems?.length > 0 ? Array(detailedItems.length).fill(' ').map((_, i) => {
                         return <ChartItem key={i}
-                            {...cart[i]}
+                            {...detailedItems[i].data}
                         />
                     })
                         : ""
