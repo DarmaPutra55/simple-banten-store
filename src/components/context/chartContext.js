@@ -6,6 +6,7 @@ import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
 import GetLoginInformation from "../smallcomponent/getLoginInformation/getLoginInformation";
 import Item from "../item/item";
+import { useToast } from "@chakra-ui/react";
 
 
 export const ChartContext = createContext();
@@ -15,8 +16,9 @@ export default function ChartContextProvider({ children }) {
     const [totalChartPrice, setTotalChartPrice] = useState(0);
     const { user } = useContext(UserContext)
     const queryClient = useQueryClient();
+    const toast = useToast();
 
-    const { data: items, fetchStatus: itemFetchStatus } = useQuery(["fetchItems"], async () => {
+    const { data: items, fetchStatus: itemFetchStatus } = useQuery(["fetchChartItems"], async () => {
         return await fetchApi("/carts/", {
             mode: "cors",
             credentials: 'include',
@@ -52,6 +54,7 @@ export default function ChartContextProvider({ children }) {
                     item.nama = detailedItem.nama;
                     item.stok = detailedItem.stok;
                     item.harga = detailedItem.harga;
+                    item.diskon = detailedItem.diskon;
                     return item;
                 },
 
@@ -68,6 +71,10 @@ export default function ChartContextProvider({ children }) {
                 credentials: 'include',
                 method: "DELETE"
             });
+    }, {
+        onSuccess: ()=>{
+            queryClient.invalidateQueries("fetchChartItems");
+        }
     })
 
     const cartItemUpdateMutation = useMutation(({cartItemId, cartId, itemId, itemQuantity, checked}) => {
@@ -92,20 +99,29 @@ export default function ChartContextProvider({ children }) {
             newItemDetail.nama = oldItemDetail.data.nama;
             newItemDetail.stok = oldItemDetail.data.stok;
             newItemDetail.harga = oldItemDetail.data.harga;
+            newItemDetail.diskon = oldItemDetail.data.diskon;
             queryClient.setQueriesData(["item"+data.id], newItemDetail);
             //setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice + item.data.harga * item.data.jumlah : previousPrice, 0) : 0)
         }
     })
 
     const cartAddItemMutation = useMutation(({itemId, itemQuantity}) =>{
-        return fetchApi("/carts/"+ user?.cartId, {
+        return fetchApi("/carts", {
             mode: "cors",
             credentials: 'include',
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify({
+                "productId": itemId,
+                "productQuantity": itemQuantity,
+            })
         })
+    }, {
+        onSuccess: ()=>{
+            queryClient.invalidateQueries("fetchChartItems");
+        }
     })
 
     const removeItem = (cartItemId, itemId, itemQuantity) => {
@@ -119,6 +135,31 @@ export default function ChartContextProvider({ children }) {
 
     const checkItem = (cartItemId) => {
         return;
+    }
+
+    const cartAddItemHandler = (itemId, itemQuantity) =>{
+        if (typeof itemId !== 'number') return;
+        if (typeof itemQuantity !== 'number') return;
+        cartAddItemMutation.mutate({itemId , itemQuantity}, {
+            onSuccess: ()=>{
+                toast({
+                    title: "Item ditambahkan",
+                    description: "Item berhasil ditambah ke cart.",
+                    status: 'success',
+                    duration: 4000,
+                    isClosable: true,
+                });
+            },
+            onError: ()=>{
+                toast({
+                    title: "Gagal menambah item",
+                    description: user?.id ? "Terjadi kesalahan saat menambahkan item." : "Silahkan login terlebih dahulu.",
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                });
+            }
+        })
     }
 
     const updateCartItemHandler = (cartItemId, itemId, itemQuantity, checked) => {
@@ -136,11 +177,11 @@ export default function ChartContextProvider({ children }) {
     }
 
     useEffect(()=>{
-        setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice + item.data.harga * item.data.jumlah : previousPrice, 0) : 0)
+        setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice - (Math.round(previousPrice * item.data.diskon) / 100) + item.data.harga * item.data.jumlah : previousPrice, 0) : 0)
     }, [detailedItems])
 
     return (
-        <ChartContext.Provider value={{detailedItems, totalChartPrice, removeItem, updateCartItemHandler }}>
+        <ChartContext.Provider value={{detailedItems, totalChartPrice, removeItem, updateCartItemHandler, cartAddItemHandler }}>
             {
                 detailedItemsFetchStatus || itemFetchStatus === 'fetching' ?
                     <FullscreeLoading />

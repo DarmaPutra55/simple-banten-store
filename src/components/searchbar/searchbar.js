@@ -3,7 +3,7 @@ import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search, User } from "react-feather";
 import { useContext, useState } from 'react';
-import { useNavigate, useSearchParams, Link as ReactLink } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link as ReactLink, Navigate } from 'react-router-dom';
 import { ChartContext } from '../context/chartContext';
 
 export default function SearchBar() {
@@ -12,6 +12,7 @@ export default function SearchBar() {
     const { detailedItems } = useContext(ChartContext);
     const cartCheckedItemCount = detailedItems?.length > 0 ? detailedItems.filter((item) => item.data.checked).length : 0;
     const navigate = useNavigate();
+    
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
 
@@ -53,7 +54,7 @@ export default function SearchBar() {
                 <Box flexGrow={"1"} maxW={["xs", "4xl"]}>
                     <form onSubmit={(e) => {
                         e.preventDefault();
-                        navigate(searchText ? "/?itemName=" + searchText : "/", { replace: true });
+                        navigate(searchText ? "/?nama=" + searchText : "/", { replace: true });
                     }}>
                         <InputGroup pr={2}>
                             <InputLeftElement
@@ -62,7 +63,7 @@ export default function SearchBar() {
                                     <Search color='grey' size={20} />
                                 }
                             />
-                            <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("itemName") || ""} onChange={(e) => { setSearchText(e.target.value) }} />
+                            <Input variant={'outline'} placeholder='Masukan nama barang...' defaultValue={searchParams.get("nama") || ""} onChange={(e) => { setSearchText(e.target.value) }} />
                         </InputGroup>
                     </form>
                 </Box>
@@ -84,15 +85,16 @@ export default function SearchBar() {
                             />
                         </Center>
                         <Flex
-                            w={"15px"}
-                            h={"15px"}
+                            minW={"16px"}
+                            minH={"16px"}
                             position={"absolute"}
                             bottom={"0"}
                             right={"0"}
                             display={cartCheckedItemCount > 0 ? "flex" : "none"}
                             bgColor={"red"}
-                            borderRadius={"13px"}
+                            borderRadius={"10px"}
                             justify={"center"}
+                            align={"center"}
                         >
                             <Text
                                 p={0}

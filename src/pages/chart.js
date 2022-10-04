@@ -57,12 +57,12 @@ export default function Chart() {
                             >
                                 Total Belanja
                             </Text>
-                            <Heading
-                                as={"h1"}
-                                fontSize={"1.6em"}
+                            <Text
+                                fontWeight={"bold"}
+                                fontSize={"large"}
                             >
                                 {CurrencyFormatter(totalChartPrice)}
-                            </Heading>
+                            </Text>
                         </Box>
                     </Stack>
                     <Flex

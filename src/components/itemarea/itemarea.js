@@ -4,60 +4,39 @@ import CurrencyFormatter from "../smallcomponent/currencyFormatter/currencyForma
 import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
+import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from "react-router-dom";
 
-export default function ItemArea(props) {
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useBoolean(true);
 
-    const itemValidator = (item) => {
-        if (props.searchParams.has("itemCategory") && item.kategori.toLowerCase() !== props.searchParams.get("itemCategory")) return false;
-        if (props.searchParams.has("itemName") && !item.nama.toLowerCase().includes(props.searchParams.get("itemName"))) return false;
-        return true;
-    }
+export default function ItemArea() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [link, setLink] = useState('');
+    const queryClient = useQueryClient();
 
-    const searchItems = async () => {
-        try {
-            setIsLoading.on();
-            const fetchedItems = await fetchApi("/products");
-            const temp_items = []
+    useEffect(()=>{
+        let fetchLink = "/products";
+        if (searchParams.has("nama")) fetchLink = fetchLink + "?nama=" + searchParams.get("nama");
+        if (searchParams.has("kategori")) fetchLink = fetchLink + "?kategori=" + searchParams.get("kategori");
+        queryClient.invalidateQueries(["items"]);
+        setLink(fetchLink);
+    }, [searchParams])
 
-            fetchedItems.forEach(fetchedItem => {
-                if (!itemValidator(fetchedItem)) {
-                    return;
-                }
-                const item = {
-                    "id": fetchedItem.id,
-                    "img": fetchedItem.gambar,
-                    "discount": fetchedItem.diskon,
-                    "price": fetchedItem.diskon > 0 ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon) / 100))) : CurrencyFormatter(fetchedItem.harga),
-                    "originalPrice": CurrencyFormatter(fetchedItem.harga),
-                    "name": fetchedItem.nama,
-                    "rating": fetchedItem.rating.rate,
-                    "sold": fetchedItem.terjual
-                };
-
-                temp_items.push(item);
-            });
-
-            setItems(temp_items);
+    const {data: items, isLoading: isItemsLoading} = useQuery(['items'], async ()=>{
+        return await fetchApi(link)
+    }, {
+        retry: false,
+        enabled: link ? true : false,
+        onSettled: ()=>{
+            setLink(''); //Reset the link after done fetching so it won't use the same link over and over again.
         }
-        catch (err) {
-            console.error(err);
-        }
-        finally {
-            setIsLoading.off()
-        }
-    }
-
-    useEffect(() => {
-        setItems([]);
-        searchItems();
-    }, [props.searchParams])
+    });
+    
 
     return (
         <>
             {
-                isLoading ?
+                isItemsLoading ?
                     <Loading />
                     :
 
@@ -66,17 +45,17 @@ export default function ItemArea(props) {
                         justify={["baseline", "baseline", "center"]}
                     >
                         {
-                            items.length > 0 ?
+                            items?.length > 0 ?
                             Array(items.length).fill('').map((_, i) => {
                                 return <Item
                                     key={i}
                                     id={items[i].id}
-                                    img={items[i].img}
-                                    name={items[i].name}
-                                    price={items[i].price}
-                                    originalPrice={items[i].originalPrice}
-                                    discount={items[i].discount}
-                                    rating={items[i].rating}
+                                    img={items[i].gambar}
+                                    name={items[i].nama}
+                                    price={items[i].diskon > 0 ? CurrencyFormatter((items[i].harga - (Math.round(items[i].harga * items[i].diskon) / 100))) : CurrencyFormatter(items[i].harga)}
+                                    originalPrice={CurrencyFormatter(items[i].harga)}
+                                    discount={items[i].diskon}
+                                    rating={items[i].rating.rate}
                                     sold={items[i].sold}
                                 />;
                             })

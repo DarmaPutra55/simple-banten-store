@@ -9,7 +9,7 @@ import ActionIcon from "../../components/smallcomponent/icons/icon";
 import AlertDialog from '../alertDialog/alertDialog';
 import CurrencyFormatter from "../../components/smallcomponent/currencyFormatter/currencyFormatter"
 
-export default function ChartItem({ id, id_barang, gambar, nama, stok, harga, jumlah, checked }) {
+export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, harga, jumlah, checked }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [itemBought, setItemBought] = useItemQuantity(jumlah, stok);
     const [itemChecked, setItemChecked] = useState(checked);
@@ -43,7 +43,7 @@ export default function ChartItem({ id, id_barang, gambar, nama, stok, harga, ju
     }
    
     useEffect(() => {
-        setTotalPrice(harga * itemBought);
+        setTotalPrice((harga - (Math.round(harga * diskon) / 100)) * itemBought);
     }, [itemBought, harga])
 
     useEffect(() => {

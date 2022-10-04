@@ -54,7 +54,17 @@ export default function ItemDetail() {
                             className={"responsiveWidth"}
                             spacing={"18px"}
                         >
-                            <BuyModal productName={itemDetail.nama} productImg={itemDetail.gambar} productStok={itemDetail.stok} isOpen={isOpen} onClose={onClose}/>
+                            <BuyModal 
+                                productId={itemDetail.id}
+                                productName={itemDetail.nama}
+                                productDiscount={itemDetail.diskon} 
+                                productPrice={itemDetail.harga} 
+                                productImg={itemDetail.gambar} 
+                                productStok={itemDetail.stok} 
+                                isOpen={isOpen} 
+                                onClose={onClose}
+                            />
+
                             <ItemDetailHeader
                                 img={itemDetail.gambar}
                                 name={itemDetail.nama}

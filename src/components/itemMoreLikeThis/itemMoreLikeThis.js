@@ -64,7 +64,7 @@ export default function ItemMoreLikeThis(props) {
                         <Flex justify={"end"}>
                             <Link
                                 as={ReactLink}
-                                to={"/?itemCategory=" + props.kategori}
+                                to={"/?kategori=" + props.kategori}
                             >
                                 <Text
                                     py={"4px"}
