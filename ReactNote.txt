@@ -251,4 +251,33 @@ const detailedItems = useQueries({
 
 const detailedItemsFetchStatus = detailedItems.some(result => result.fetchStatus === "fetching") //Check if any of the member is still fetching.
 
-+Use update instead of patch.
++Use update instead of patch for updating resource with API.
+
++Don't use props drilling if the form is deep inside the children, either lift the form's level or make a context. Otherwise you will always lose focus on change.
+
+Example:
+function Parent({setSomething}){
+	<FormSomething setSomething ={setSomething} />  //Don't do this!
+}
+
+function Parent({setSomething}){
+	<form>
+		<Input onChange={setSomething} />
+	</form>
+}
+
++For forwarding ref, if the ref is will be forwarded to diffrent component, rename it to something else midway to prevent error.
+
+Example:
+const WrapSearchbarInputRef = React.forwardRef((props, ref)=>{
+        return <SearcbarInput innerRef={ref} {...props} /> //And then take the innerRef as props in the SearchbarInput component
+})
+
+return(
+	<WrapSearchbarInputRef searchText={searchText} defaultValue={searchText} onChange={onTextSearchChangeHandler} ref={searchBarRef} />
+)
+
++Use window.location.href if you want to redirect into the same page but with diffrent query.
+Example:
+
+window.location.href = searchText ? "/?nama=" + searchText : "/"; //Will redirect into home page with query, even when user is still in home page.

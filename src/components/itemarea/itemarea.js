@@ -5,22 +5,19 @@ import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import { useQuery } from "@tanstack/react-query";
-import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from "react-router-dom";
 
 
 export default function ItemArea() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [link, setLink] = useState('');
-    const queryClient = useQueryClient();
 
     useEffect(()=>{
         let fetchLink = "/products";
         if (searchParams.has("nama")) fetchLink = fetchLink + "?nama=" + searchParams.get("nama");
         if (searchParams.has("kategori")) fetchLink = fetchLink + "?kategori=" + searchParams.get("kategori");
-        queryClient.invalidateQueries(["items"]);
         setLink(fetchLink);
-    }, [searchParams])
+    }, [])
 
     const {data: items, isLoading: isItemsLoading} = useQuery(['items'], async ()=>{
         return await fetchApi(link)
