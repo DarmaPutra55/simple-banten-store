@@ -78,31 +78,34 @@ export default function SearchBar() {
                         as={ReactLink}
                         to={"/chart"}
                     >
-
-                        <ActionIcon
-                            label={"Cart"}
-                            icon={<ShoppingCart size={"2em"} />}
-                        />
                         <Flex
-                            minW={"16px"}
-                            minH={"16px"}
-                            position={"absolute"}
-                            bottom={"0"}
-                            right={"0"}
-                            display={cartCheckedItemCount > 0 ? "flex" : "none"}
-                            bgColor={"red"}
-                            borderRadius={"10px"}
-                            justify={"center"}
-                            align={"center"}
+                            position={"relative"}
                         >
-                            <Text
-                                p={0}
-                                fontSize={"10px"}
-                                fontWeight={"bold"}
-                                color={"white"}
+                            <ActionIcon
+                                label={"Cart"}
+                                icon={<ShoppingCart size={"2em"} />}
+                            />
+                            <Flex
+                                minW={"16px"}
+                                minH={"16px"}
+                                position={"absolute"}
+                                bottom={"0"}
+                                right={"0"}
+                                display={cartCheckedItemCount > 0 ? "flex" : "none"}
+                                bgColor={"red"}
+                                borderRadius={"10px"}
+                                justify={"center"}
+                                align={"center"}
                             >
-                                {cartCheckedItemCount}
-                            </Text>
+                                <Text
+                                    p={0}
+                                    fontSize={"10px"}
+                                    fontWeight={"bold"}
+                                    color={"white"}
+                                >
+                                    {cartCheckedItemCount}
+                                </Text>
+                            </Flex>
                         </Flex>
                     </Link>
                     <Link

@@ -65,7 +65,7 @@ export default function ChartContextProvider({ children }) {
 
     const detailedItemsFetchStatus = detailedItems.some(result => result.fetchStatus === "fetching")
 
-    const cartRemoveItemMutation = useMutation(({ cartId, removedCartItemId }) => {
+    const cartRemoveItemMutation = useMutation(({ removedCartItemId }) => {
         return fetchApi('/carts/' + removedCartItemId,
             {
                 credentials: 'include',
@@ -114,8 +114,8 @@ export default function ChartContextProvider({ children }) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "productId": itemId,
-                "productQuantity": itemQuantity,
+                "id_barang": itemId,
+                "jumlah": itemQuantity,
             })
         })
     }, {
@@ -124,9 +124,9 @@ export default function ChartContextProvider({ children }) {
         }
     })
 
-    const removeItem = (cartItemId, itemId, itemQuantity) => {
+    const removeItem = (cartItemId) => {
         if (typeof cartItemId !== 'number') return;
-        cartRemoveItemMutation.mutate({ "cartId": user?.cartId, "removedCartItemId": cartItemId });
+        cartRemoveItemMutation.mutate({ "removedCartItemId": cartItemId });
     }
 
     const addItem = (item) => {
@@ -177,7 +177,7 @@ export default function ChartContextProvider({ children }) {
     }
 
     useEffect(()=>{
-        setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice - (Math.round(previousPrice * item.data.diskon) / 100) + item.data.harga * item.data.jumlah : previousPrice, 0) : 0)
+        setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice + (item.data.harga - (Math.round(item.data.harga * item.data.diskon) / 100)) * item.data.jumlah : previousPrice, 0) : 0)
     }, [detailedItems])
 
     return (
