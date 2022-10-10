@@ -281,3 +281,5 @@ return(
 Example:
 
 window.location.href = searchText ? "/?nama=" + searchText : "/"; //Will redirect into home page with query, even when user is still in home page.
+
++In chakra ui, before you can use scale, you had to declare "transform: auto" first as props.

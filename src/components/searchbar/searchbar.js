@@ -1,18 +1,29 @@
-import { Flex, Link, Text, useDisclosure } from '@chakra-ui/react'
+import {
+    Flex,
+    Link,
+    Text,
+    useDisclosure,
+    Avatar
+} from '@chakra-ui/react'
+
 import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
-import { ShoppingCart, Search, User } from "react-feather";
-import { useContext, useState } from 'react';
+import { ShoppingCart, Search } from "react-feather";
+import { useContext, useRef, useState } from 'react';
 import { useSearchParams, Link as ReactLink } from 'react-router-dom';
 import { ChartContext } from '../context/chartContext';
 import SearchbarModal from './searchbarModal';
 import SearcbarInput from './searchbarInput';
+import ProfileModal from '../profileModal/profileModal';
+import ProfileDrawer from '../profileDrawer/profileDrawer';
 
 export default function SearchBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [test, setTest] = useState(false);
     const [searchParams] = useSearchParams();
     const [searchText, setSearchText] = useState("" || searchParams.get("nama"));
     const { detailedItems } = useContext(ChartContext);
+    const iconRef = useRef();
     const cartCheckedItemCount = detailedItems?.length > 0 ? detailedItems.filter((item) => item.data.checked).length : 0;
 
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
@@ -55,7 +66,7 @@ export default function SearchBar() {
                         </Flex>
                     </Link>
                     <Flex
-                        display={["flex", "none"]}
+                        display={["flex", "flex", "none"]}
                     >
                         <ActionIcon
                             label={"Search"}
@@ -64,9 +75,9 @@ export default function SearchBar() {
                         />
                     </Flex>
                     <Flex
-                        display={["none", "flex"]}
+                        display={["none", "none", "flex"]}
+                        width={"70%"}
                         px={"2em"}
-                        flexGrow={1}
                         align={"center"}
                     >
                         <SearcbarInput
@@ -108,22 +119,36 @@ export default function SearchBar() {
                             </Flex>
                         </Flex>
                     </Link>
-                    <Link
-                        as={ReactLink}
-                        to={"/login"}
+                    <Flex 
+                        align={"center"}
+                        position={"relative"}
                     >
-                        <ActionIcon
-                            label={"User"}
-                            icon={<User size={"2em"} />}
+                        <Avatar
+                            ref={iconRef}
+                            boxSize={"2em"}
+                            bgColor={"lightgrey"}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onOpen();
+                            }}
                         />
-                    </Link>
+                        <ProfileModal
+                            topPos={iconRef.current?.offsetHeight + 9}
+                            //isOpen={isOpen}
+                            //onClose={onClose}
+                        />
+                    </Flex>
                 </Flex>
             </Flex>
+            <ProfileDrawer 
+                isOpen={isOpen}
+                onClose={onClose}
+            />
             <SearchbarModal
                 searchText={searchText}
                 setSearchText={setSearchText}
-                isOpen={isOpen}
-                onClose={onClose}
+            //isOpen={isOpen}
+            //onClose={onClose}
             />
         </>
     );

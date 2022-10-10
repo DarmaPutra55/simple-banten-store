@@ -1,16 +1,18 @@
-import { useContext, useState } from "react";
-import { Stack, Flex, FormControl, FormLabel, FormHelperText, FormErrorMessage, Input, Button, ButtonGroup, Text } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom"
+import { Stack, Button, ButtonGroup } from "@chakra-ui/react";
 import { UserContext } from "../components/context/userContext"
 import SearchBar from "../components/searchbar/searchbar";
 import RegisterForm from "../components/registerForm/registerForm";
 import LoginForm from "../components/loginForm/loginForm";
 
 export default function SignIn() {
-    const linkTarget = window.location.href.split("/");
+    const navigation = useNavigate();
+    const location = useLocation();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [acessLink, setAcessLink] = useState(linkTarget[linkTarget.length - 1] === "login" ? true : false);
+    const [acessLink, setAcessLink] = useState(location.pathname.includes("login") ? true : false);
     const { register, login } = useContext(UserContext);
 
     const registerFormSubmitHandler = () => {
@@ -27,18 +29,21 @@ export default function SignIn() {
         setEmail("");
     }
 
+    useEffect(()=>{
+        setAcessLink(location.pathname.includes("login") ? true : false);
+        clearState();
+    }, [location])
+
     return (
         <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
             <SearchBar />
             <Stack gap={"0px"} bgColor={"white"} p={"25px"} w={'full'} className={"responsiveWidthSmaller"}>
                 <ButtonGroup spacing={"0px"}>
                     <Button isActive={acessLink ? true : false} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
-                        clearState();
-                        setAcessLink(true)
+                        navigation("/login")
                     }}>Login</Button>
                     <Button isActive={acessLink ? false : true} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
-                        clearState();
-                        setAcessLink(false)
+                        navigation("/register")
                     }}>Registrasi</Button>
                 </ButtonGroup>
                 {
