@@ -1,12 +1,15 @@
-import { Box, Flex, Text, Stack } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack, Link } from "@chakra-ui/react";
+import {
+    Link as ReactLink
+} from "react-router-dom"
 
-export default function ProfileModal({topPos, isOpen, onClose }) {
+export default function ProfileModal({ topPos, isOpen, onClose }) {
     return (
         <>
             <Box
                 visibility={isOpen ? "visible" : "hidden"}
                 opacity={isOpen ? 1 : 0}
-                transition={"all 200ms ease"}
+                transition={"all 300ms ease"}
                 pos={"Fixed"}
                 top={0}
                 left={0}
@@ -23,16 +26,24 @@ export default function ProfileModal({topPos, isOpen, onClose }) {
                 scale={isOpen ? 1 : 0}
                 transform={"auto"}
                 padding={"8px"}
-                transition={"all 200ms ease"}
+                transition={"all 300ms ease"}
                 pos={"absolute"}
                 top={topPos || 0}
                 right={0}
                 zIndex={"300"}
                 backgroundColor={"white"}
             >
-                <Stack>
-                    <Text>Login</Text>
-                    <Text>Register</Text>
+                <Stack w={"full"}>
+                    <Link as={ReactLink} to="/login" _hover={"none"}>
+                        <Box w={"full"} fontSize={"1.2em"}>
+                            Login
+                        </Box>
+                    </Link>
+                    <Link as={ReactLink} to="/register" _hover={"none"}>
+                        <Box w={"full"} fontSize={"1.2em"}>
+                            Register
+                        </Box>
+                    </Link>
                 </Stack>
             </Flex>
         </>

@@ -9,7 +9,7 @@ import {
 import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
 import { ShoppingCart, Search } from "react-feather";
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useSearchParams, Link as ReactLink } from 'react-router-dom';
 import { ChartContext } from '../context/chartContext';
 import SearchbarModal from './searchbarModal';
@@ -19,12 +19,33 @@ import ProfileDrawer from '../profileDrawer/profileDrawer';
 
 export default function SearchBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isProfileDrawerOpen, onOpen: onProfileDrawerOpen, onClose: onProfileDrawerClose } = useDisclosure();
+    const { isOpen: isProfileModalOpen, onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure();
     const [test, setTest] = useState(false);
     const [searchParams] = useSearchParams();
     const [searchText, setSearchText] = useState("" || searchParams.get("nama"));
     const { detailedItems } = useContext(ChartContext);
     const iconRef = useRef();
     const cartCheckedItemCount = detailedItems?.length > 0 ? detailedItems.filter((item) => item.data.checked).length : 0;
+
+    const handleRezise = () =>{
+        const windowInnerWidth = window.innerWidth;
+        if(isProfileDrawerOpen && windowInnerWidth > 800){
+            onProfileDrawerClose();
+            onProfileModalOpen();
+        }
+        else if(isProfileModalOpen && windowInnerWidth < 800){
+            onProfileModalClose();
+            onProfileDrawerOpen();
+        }
+    }
+
+    useEffect(()=>{
+        window.addEventListener('resize', handleRezise);
+        return ()=>{
+            window.removeEventListener('resize', handleRezise);
+        }
+    }, [isProfileDrawerOpen, isProfileModalOpen])
 
     //Provide the searchTextChangeEvent props with callback function to handle what happen when searchbar value change.
     //Provide the submitEvent props to handle what will happen when user press enter.
@@ -50,6 +71,7 @@ export default function SearchBar() {
                         as={ReactLink}
                         to={"/"}
                         h={"100%"}
+                        _hover={"none"}
                     >
                         <Flex
                             h={"100%"}
@@ -129,26 +151,26 @@ export default function SearchBar() {
                             bgColor={"lightgrey"}
                             onClick={(e) => {
                                 e.preventDefault();
-                                onOpen();
+                                window.innerWidth < 800 ? onProfileDrawerOpen() : onProfileModalOpen();
                             }}
                         />
                         <ProfileModal
                             topPos={iconRef.current?.offsetHeight + 9}
-                            //isOpen={isOpen}
-                            //onClose={onClose}
+                            isOpen={isProfileModalOpen}
+                            onClose={onProfileModalClose}
                         />
                     </Flex>
                 </Flex>
             </Flex>
             <ProfileDrawer 
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isProfileDrawerOpen}
+                onClose={onProfileDrawerClose}
             />
             <SearchbarModal
                 searchText={searchText}
                 setSearchText={setSearchText}
-            //isOpen={isOpen}
-            //onClose={onClose}
+                isOpen={isOpen}
+                onClose={onClose}
             />
         </>
     );

@@ -12,6 +12,7 @@ import {
     Stack,
     Flex,
     Divider,
+    Box
 } from '@chakra-ui/react'
 
 import {
@@ -31,9 +32,9 @@ export default function ProfileDrawer({ isOpen, onClose }) {
                 <DrawerHeader></DrawerHeader>
 
                 <DrawerBody>
-                    <Stack>
-                        <Flex 
-                            justify={"center"} 
+                    <Stack w={'full'}>
+                        <Flex
+                            justify={"center"}
                             align={"center"}
                             direction={"column"}
                             gap={"8px"}
@@ -42,11 +43,15 @@ export default function ProfileDrawer({ isOpen, onClose }) {
                             <Text fontSize={"2xl"} fontWeight={"bold"}>Guest</Text>
                         </Flex>
                         <Divider />
-                        <Link as={ReactLink} to="/login" fontSize={"1.2em"}>
-                            Login
+                        <Link as={ReactLink} to="/login" _hover={"none"}>
+                            <Box w={"full"} fontSize={"1.2em"}>
+                                Login
+                            </Box>
                         </Link>
-                        <Link as={ReactLink} to="/register" fontSize={"1.2em"}>
-                            Register
+                        <Link as={ReactLink} to="/register" _hover={"none"}>
+                            <Box w={"full"} fontSize={"1.2em"}>
+                                Register
+                            </Box>
                         </Link>
                     </Stack>
                 </DrawerBody>
