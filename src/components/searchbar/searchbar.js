@@ -16,15 +16,16 @@ import SearchbarModal from './searchbarModal';
 import SearcbarInput from './searchbarInput';
 import ProfileModal from '../profileModal/profileModal';
 import ProfileDrawer from '../profileDrawer/profileDrawer';
+import { UserContext } from '../context/userContext';
 
 export default function SearchBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isProfileDrawerOpen, onOpen: onProfileDrawerOpen, onClose: onProfileDrawerClose } = useDisclosure();
     const { isOpen: isProfileModalOpen, onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure();
-    const [test, setTest] = useState(false);
     const [searchParams] = useSearchParams();
     const [searchText, setSearchText] = useState("" || searchParams.get("nama"));
     const { detailedItems } = useContext(ChartContext);
+    const { user } = useContext(UserContext);
     const iconRef = useRef();
     const cartCheckedItemCount = detailedItems?.length > 0 ? detailedItems.filter((item) => item.data.checked).length : 0;
 
@@ -71,7 +72,7 @@ export default function SearchBar() {
                         as={ReactLink}
                         to={"/"}
                         h={"100%"}
-                        _hover={"none"}
+                        _hover={{}}
                     >
                         <Flex
                             h={"100%"}
@@ -146,6 +147,7 @@ export default function SearchBar() {
                         position={"relative"}
                     >
                         <Avatar
+                            name={user?.id ? user.username : ""}
                             ref={iconRef}
                             boxSize={"2em"}
                             bgColor={"lightgrey"}

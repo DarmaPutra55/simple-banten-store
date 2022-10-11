@@ -1,11 +1,8 @@
 import { useContext, createContext, useEffect, useState } from "react";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "./userContext"
-import Cookies from "universal-cookie"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
-import GetLoginInformation from "../smallcomponent/getLoginInformation/getLoginInformation";
-import Item from "../item/item";
 import { useToast } from "@chakra-ui/react";
 
 
