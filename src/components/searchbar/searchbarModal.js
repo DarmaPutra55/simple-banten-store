@@ -15,9 +15,13 @@ import {
 } from '@chakra-ui/react';
 import { Search } from "react-feather";
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function SearchbarModal({ searchText, setSearchText, isOpen, onClose }) {
     const searchBarRef = useRef(null);
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const onTextSearchChangeHandler = (e) => {
         e.preventDefault();
@@ -38,8 +42,8 @@ export default function SearchbarModal({ searchText, setSearchText, isOpen, onCl
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                window.location.href = searchText ? "/?nama=" + searchText : "/";
-                                //navigate(searchText ? "/?nama=" + searchText : "/", { replace: true });
+                                queryClient.resetQueries(['items']);
+                                navigate(searchText ? "/?nama=" + searchText : "/", { replace: true });
                             }}>
                             <InputGroup pr={2}>
                                 <InputLeftElement

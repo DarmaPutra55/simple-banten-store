@@ -1,41 +1,17 @@
 import { Flex, useBoolean, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import CurrencyFormatter from "../smallcomponent/currencyFormatter/currencyFormatter"
-import Loading from "../smallcomponent/loading/loading";
+
 import Item from "../item/item";
-import fetchApi from "../smallcomponent/fetchApi/fetchApi";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
 
 
-export default function ItemArea() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [link, setLink] = useState('');
+export default function ItemArea({items}) {
 
-    useEffect(()=>{
-        let fetchLink = "/products";
-        if (searchParams.has("nama")) fetchLink = fetchLink + "?nama=" + searchParams.get("nama");
-        if (searchParams.has("kategori")) fetchLink = fetchLink + "?kategori=" + searchParams.get("kategori");
-        setLink(fetchLink);
-    }, [])
-
-    const {data: items, isLoading: isItemsLoading} = useQuery(['items'], async ()=>{
-        return await fetchApi(link)
-    }, {
-        retry: false,
-        enabled: link ? true : false,
-        onSettled: ()=>{
-            setLink(''); //Reset the link after done fetching so it won't use the same link over and over again.
-        }
-    });
+    
     
 
     return (
         <>
-            {
-                isItemsLoading ?
-                    <Loading />
-                    :
+
 
                     <Flex
                         flexWrap={"wrap"}
@@ -62,7 +38,7 @@ export default function ItemArea() {
                             </Flex>
                         }
                     </Flex>
-            }
+
         </>
     )
 }

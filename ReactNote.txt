@@ -292,3 +292,5 @@ Example:
 const location = useLocation();
 
 console.log(location.pathName) // Will print url
+
++use resetQueries to remove query from cache and then reftech it. Use removeQueries if you want to remove the query from cache.

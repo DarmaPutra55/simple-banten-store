@@ -1,9 +1,10 @@
 import { createContext } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, QueryCache } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
 import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
 import { useToast } from "@chakra-ui/react";
+
 
 
 export const UserContext = createContext();
@@ -45,7 +46,7 @@ export default function UserContextProvider({ children }) {
                 duration: 4000,
                 isClosable: true,
             });
-            queryClient.invalidateQueries(['fetchUser']);
+            queryClient.removeQueries(["fetchUser"]);
             navigate("/");
         },
         onError: ()=>{
@@ -84,7 +85,39 @@ export default function UserContextProvider({ children }) {
                 duration: 4000,
                 isClosable: true,
             });
-            queryClient.invalidateQueries(['fetchUser']);
+            queryClient.removeQueries(["fetchUser"]);
+            navigate("/");
+        },
+        onError: ()=>{
+            toast({
+                title: "Gagal registrasi",
+                description: "Terjadi kesalahan saat melakukan registrasi.",
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            });
+        }
+    })
+
+    const logoutMutation = useMutation(()=>{
+        return fetchApi("/logout", {
+            credentials: 'include', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+        })
+    }, {
+        retry: false,
+        onSuccess: ()=>{
+            toast({
+                title: "Berhasil logout.",
+                description: "Anda telah logout dari E-Banten.",
+                status: 'success',
+                duration: 4000,
+                isClosable: true,
+            });
+            queryClient.removeQueries();
             navigate("/");
         },
         onError: ()=>{
@@ -103,7 +136,11 @@ export default function UserContextProvider({ children }) {
     }
 
     const register = (email, username, password) =>{
-        registerMutation.mutate({email, username, password})
+        registerMutation.mutate({email, username, password});
+    }
+
+    const logout = () =>{
+        logoutMutation.mutate();
     }
     
     /*const { data: login, fetchStatus: loginFetchStatus } = useQuery(["loginUser"], async () => {
@@ -131,7 +168,7 @@ export default function UserContextProvider({ children }) {
     }) */
 
     return (
-        <UserContext.Provider value={{user, login, register}}>
+        <UserContext.Provider value={{user, login, register, logout}}>
             {
                 userFetchStatus === 'fetching' ?
                     <FullscreeLoading />
