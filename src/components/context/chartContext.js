@@ -42,10 +42,10 @@ export default function ChartContextProvider({ children }) {
     })*/
 
     const detailedItems = useQueries({
-        queries: items? items.table_cart_barang.map((item)=>{
+        queries: items ? items.table_cart_barang.map((item) => {
             return {
-                queryKey: ["item"+item.id],
-                queryFn: async ()=>{
+                queryKey: ["item" + item.id],
+                queryFn: async () => {
                     const detailedItem = await fetchApi('/products/' + item.id_barang);
                     item.gambar = detailedItem.gambar
                     item.nama = detailedItem.nama;
@@ -69,12 +69,12 @@ export default function ChartContextProvider({ children }) {
                 method: "DELETE"
             });
     }, {
-        onSuccess: ()=>{
+        onSuccess: () => {
             queryClient.invalidateQueries("fetchChartItems");
         }
     })
 
-    const cartItemUpdateMutation = useMutation(({cartItemId, cartId, itemId, itemQuantity, checked}) => {
+    const cartItemUpdateMutation = useMutation(({ cartItemId, cartId, itemId, itemQuantity, checked }) => {
         return fetchApi("/carts/" + cartItemId, {
             credentials: 'include',
             method: "PATCH",
@@ -89,20 +89,20 @@ export default function ChartContextProvider({ children }) {
             })
         });
     }, {
-        onSuccess: (data)=>{
-            const oldItemDetail = detailedItems.find((item)=> item.data.id === data.id);
+        onSuccess: (data) => {
+            const oldItemDetail = detailedItems.find((item) => item.data.id === data.id);
             let newItemDetail = data;
             newItemDetail.gambar = oldItemDetail.data.gambar
             newItemDetail.nama = oldItemDetail.data.nama;
             newItemDetail.stok = oldItemDetail.data.stok;
             newItemDetail.harga = oldItemDetail.data.harga;
             newItemDetail.diskon = oldItemDetail.data.diskon;
-            queryClient.setQueriesData(["item"+data.id], newItemDetail);
+            queryClient.setQueriesData(["item" + data.id], newItemDetail);
             //setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice + item.data.harga * item.data.jumlah : previousPrice, 0) : 0)
         }
     })
 
-    const cartAddItemMutation = useMutation(({itemId, itemQuantity}) =>{
+    const cartAddItemMutation = useMutation(({ itemId, itemQuantity }) => {
         return fetchApi("/carts", {
             mode: "cors",
             credentials: 'include',
@@ -116,7 +116,7 @@ export default function ChartContextProvider({ children }) {
             })
         })
     }, {
-        onSuccess: ()=>{
+        onSuccess: () => {
             queryClient.invalidateQueries("fetchChartItems");
         }
     })
@@ -134,11 +134,11 @@ export default function ChartContextProvider({ children }) {
         return;
     }
 
-    const cartAddItemHandler = (itemId, itemQuantity) =>{
+    const cartAddItemHandler = (itemId, itemQuantity) => {
         if (typeof itemId !== 'number') return;
         if (typeof itemQuantity !== 'number') return;
-        cartAddItemMutation.mutate({itemId , itemQuantity}, {
-            onSuccess: ()=>{
+        cartAddItemMutation.mutate({ itemId, itemQuantity }, {
+            onSuccess: () => {
                 toast({
                     title: "Item ditambahkan",
                     description: "Item berhasil ditambah ke cart.",
@@ -147,7 +147,7 @@ export default function ChartContextProvider({ children }) {
                     isClosable: true,
                 });
             },
-            onError: ()=>{
+            onError: () => {
                 toast({
                     title: "Gagal menambah item",
                     description: user?.id ? "Terjadi kesalahan saat menambahkan item." : "Silahkan login terlebih dahulu.",
@@ -159,26 +159,49 @@ export default function ChartContextProvider({ children }) {
         })
     }
 
-    const updateCartItemHandler = (cartItemId, itemId, itemQuantity, checked) => {
+    const updateCartItemHandler = (cartItemId, itemId, itemQuantity, checked, option = {}) => {
         if (typeof cartItemId !== 'number') return;
         if (typeof itemId !== 'number') return;
         if (typeof itemQuantity !== 'number') return;
         if (typeof checked !== 'boolean') return;
         cartItemUpdateMutation.mutate({
             "cartItemId": cartItemId,
-            "cartId" : user?.cartId,
-            "itemId" : itemId,
-            "itemQuantity" : itemQuantity,
-            "checked" : checked
-        });
+            "cartId": user?.cartId,
+            "itemId": itemId,
+            "itemQuantity": itemQuantity,
+            "checked": checked
+        }, option)
     }
 
-    useEffect(()=>{
+    const updateCartItemHandlerWithToast = (cartItemId, itemId, itemQuantity, checked) => {
+        updateCartItemHandler(cartItemId, itemId, itemQuantity, checked, {
+            onSuccess: () => {
+                toast({
+                    title: "Item diupdate",
+                    description: "Item berhasil diupdate.",
+                    status: 'success',
+                    duration: 4000,
+                    isClosable: true,
+                })
+            },
+            onError: () => {
+                toast({
+                    title: "Gagal mengupdate item",
+                    description: user?.id ? "Terjadi kesalahan saat mengupdate item." : "Silahkan login terlebih dahulu.",
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                })
+            }
+        })
+    }
+
+    useEffect(() => {
         setTotalChartPrice(detailedItems?.length > 0 ? detailedItems.reduce((previousPrice, item) => item?.data?.checked ? previousPrice + (item.data.harga - (Math.round(item.data.harga * item.data.diskon) / 100)) * item.data.jumlah : previousPrice, 0) : 0)
     }, [detailedItems])
 
     return (
-        <ChartContext.Provider value={{detailedItems, totalChartPrice, removeItem, updateCartItemHandler, cartAddItemHandler }}>
+        <ChartContext.Provider value={{ detailedItems, totalChartPrice, removeItem, updateCartItemHandler, updateCartItemHandlerWithToast, cartAddItemHandler }}>
             {
                 detailedItemsFetchStatus || itemFetchStatus === 'fetching' ?
                     <FullscreeLoading />

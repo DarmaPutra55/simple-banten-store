@@ -60,6 +60,7 @@ export default function ItemMoreLikeThis(props) {
                     :
                     <Flex
                         flexDir={"column"}
+                        width={"100%"}
                     >
                         <Flex justify={"end"}>
                             <Link
