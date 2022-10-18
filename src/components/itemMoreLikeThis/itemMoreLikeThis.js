@@ -1,43 +1,18 @@
 import { Flex, useBoolean, Link, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../smallcomponent/loading/loading";
 import Item from "../item/item";
 import CurrencyFormatter from "../smallcomponent/currencyFormatter/currencyFormatter";
 import { Link as ReactLink } from "react-router-dom";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
+import { ItemContext } from "../context/itemsContext";
 
 export default function ItemMoreLikeThis(props) {
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useBoolean(true);
+    const [viewedItems, setViewedItems] = useState([]);
+    const { items } = useContext(ItemContext);
 
     const intitializeItemMoreLikeThis = async () => {
-        try {
-            setIsLoading.on();
-            const fetchedItems = (await fetchApi("/products/category/" + props.kategori + "?limit=5")).filter((fetchedItem) => fetchedItem.id !== props.itemId);
-            if (fetchedItems.length === 0) return;
-            setItems(() => {
-                return fetchedItems.map(fetchedItem => {
-                    const item = {
-                        "id": fetchedItem.id,
-                        "img": fetchedItem.gambar,
-                        "discount": fetchedItem.diskon,
-                        "price": fetchedItem.diskon > 0 ? CurrencyFormatter((fetchedItem.harga - (Math.round(fetchedItem.harga * fetchedItem.diskon) / 100))) : CurrencyFormatter(fetchedItem.harga),
-                        "originalPrice": CurrencyFormatter(fetchedItem.harga),
-                        "name": fetchedItem.nama,
-                        "rating": fetchedItem.rating.rate,
-                        "sold": fetchedItem.terjual
-                    }
-
-                    return item
-                })
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-        finally {
-            setIsLoading.off()
-        }
+        setViewedItems(items?.filter((item) => item.kategori.includes(props.kategori) && item.id !== props.itemId))
     }
 
     useEffect(() => {
@@ -45,7 +20,7 @@ export default function ItemMoreLikeThis(props) {
     }, [])
 
     return (
-        items.length > 0 ?
+        viewedItems?.length > 0 ?
             <Flex
                 className={"invisibleScrollbar"}
                 flexWrap={"nowrap"}
@@ -55,46 +30,43 @@ export default function ItemMoreLikeThis(props) {
                 p={"15px"}
             >
 
-                {isLoading ?
-                    <Loading />
-                    :
-                    <Flex
-                        flexDir={"column"}
-                        width={"100%"}
-                    >
-                        <Flex justify={"end"}>
-                            <Link
-                                as={ReactLink}
-                                to={"/?kategori=" + props.kategori}
+                <Flex
+                    flexDir={"column"}
+                    width={"100%"}
+                >
+                    <Flex justify={"end"}>
+                        <Link
+                            as={ReactLink}
+                            to={"/?kategori=" + props.kategori}
+                        >
+                            <Text
+                                py={"4px"}
+                                px={"20px"}
+                                color={"blue.500"}
                             >
-                                <Text
-                                    py={"4px"}
-                                    px={"20px"}
-                                    color={"blue.500"}
-                                >
-                                    More like this...
-                                </Text>
-                            </Link>
-                        </Flex>
-                        <Flex>
-                            {
-                                Array(items.length).fill('').map((_, i) => {
-                                    return <Item
-                                        key={i}
-                                        id={items[i].id}
-                                        img={items[i].img}
-                                        name={items[i].name}
-                                        price={items[i].price}
-                                        originalPrice={items[i].originalPrice}
-                                        discount={items[i].discount}
-                                        rating={items[i].rating}
-                                        sold={items[i].sold}
-                                    />;
-                                })
-                            }
-                        </Flex>
+                                More like this...
+                            </Text>
+                        </Link>
                     </Flex>
-                }
+                    <Flex>
+                        {
+                            Array(viewedItems.length).fill('').map((_, i) => {
+                                return <Item
+                                    key={i}
+                                    id={viewedItems[i].id}
+                                    img={viewedItems[i].gambar}
+                                    name={viewedItems[i].nama}
+                                    price={viewedItems[i].diskon > 0 ? CurrencyFormatter((viewedItems[i].harga - (Math.round(viewedItems[i].harga * viewedItems[i].diskon) / 100))) : CurrencyFormatter(viewedItems[i].harga)}
+                                    originalPrice={CurrencyFormatter(viewedItems[i].harga)}
+                                    discount={viewedItems[i].diskon}
+                                    rating={viewedItems[i].rating.rate}
+                                    sold={viewedItems[i].terjual}
+                                />;
+                            })
+                        }
+                    </Flex>
+                </Flex>
+
             </Flex>
             : ""
 

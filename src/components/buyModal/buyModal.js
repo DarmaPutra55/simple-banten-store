@@ -23,9 +23,9 @@ import AlertDialog from '../alertDialog/alertDialog';
 
 export default function BuyModal({ productId, productImg, productName, productDiscount, productPrice, productStok, isOpen, onClose }) {
   const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
-  const { detailedItems, cartAddItemHandler, updateCartItemHandlerWithToast } = useContext(ChartContext);
-  const thisItemInCart = detailedItems?.find((item) => item.data.id_barang === productId);
-  const [itemQuantity, setItemQuantity] = useItemQuantity(thisItemInCart?.data.jumlah || 1, productStok);
+  const { cartItems, cartAddItemHandler, updateCartItemHandlerWithToast } = useContext(ChartContext);
+  const thisItemInCart = cartItems?.find((item) => item.id_barang === productId);
+  const [itemQuantity, setItemQuantity] = useItemQuantity(thisItemInCart?.jumlah || 1, productStok);
   const closeButtonRef = useRef();
 
   const inputChangeHandler = (e) => {
@@ -48,7 +48,7 @@ export default function BuyModal({ productId, productImg, productName, productDi
   const tambahButtonPressHandler = (e) => {
     e.preventDefault();
     if (thisItemInCart) {
-      updateCartItemHandlerWithToast(thisItemInCart.data.id, thisItemInCart.data.id_barang, itemQuantity, thisItemInCart.data.checked);
+      updateCartItemHandlerWithToast(thisItemInCart.id, thisItemInCart.id_barang, itemQuantity, thisItemInCart.checked);
       onClose();
     }
     else {
@@ -61,7 +61,7 @@ export default function BuyModal({ productId, productImg, productName, productDi
       <AlertDialog
         isOpen={isAlertOpen}
         onClose={onAlertClose}
-        chartItemId={thisItemInCart?.data.id}
+        chartItemId={thisItemInCart?.id}
       />
 
       <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={closeButtonRef}>

@@ -5,11 +5,24 @@ import Loading from "../components/smallcomponent/loading/loading";
 import { useQuery } from "@tanstack/react-query";
 import { Stack } from "@chakra-ui/react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ItemContext } from "../components/context/itemsContext";
 
 export default function MainSale() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [link, setLink] = useState('');
+    const [viewedItem, setViewedItem] = useState([]);
+    const { items } = useContext(ItemContext);
+    const location = useLocation();
+
+    useEffect(() => {
+        setViewedItem(items.filter((item)=>{
+            const isKategoriMatch = item.kategori.toLowerCase().includes(searchParams.has("kategori") ? searchParams.get("kategori") : "");
+            const isNamaIncluded = item.nama.toLowerCase().includes(searchParams.has("nama") ? searchParams.get("nama") : "");
+            if(isNamaIncluded && isKategoriMatch) return item;
+        }));
+    }, [location])
+
+    /*const [link, setLink] = useState('');
     const location = useLocation();
 
     useEffect(() => {
@@ -28,8 +41,8 @@ export default function MainSale() {
             setLink(''); //Reset link after each fetch.
         }
     });
-
+    */
     return (
-        isItemsLoading ? <Loading /> : <ItemArea items={items} />
+        <ItemArea items={viewedItem} />
     );
 }

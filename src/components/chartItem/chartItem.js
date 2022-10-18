@@ -9,7 +9,7 @@ import ActionIcon from "../../components/smallcomponent/icons/icon";
 import AlertDialog from '../alertDialog/alertDialog';
 import CurrencyFormatter from "../../components/smallcomponent/currencyFormatter/currencyFormatter"
 
-export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, harga, jumlah, checked }) {
+export default function ChartItem({cartId: id, id: id_barang, diskon, gambar, nama, stok, harga, jumlah, checked}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [itemBought, setItemBought] = useItemQuantity(jumlah, stok);
     const [itemChecked, setItemChecked] = useState(checked);
@@ -19,6 +19,7 @@ export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, h
 
     const checkClickHandler = () => {
         setItemChecked(!itemChecked);
+        //updateCartItemHandler(id, id_barang, itemBought, itemChecked);
     }
 
     const trashClickHandler = () => {
@@ -27,10 +28,12 @@ export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, h
 
     const inputChangeHandler = (e) => {
         setItemBought(e.target.value);
+        //updateCartItemHandler(id, id_barang, itemBought, itemChecked);
     }
 
     const plusChangeHandler = () => {
         setItemBought(itemBought + 1);
+        //updateCartItemHandler(id, id_barang, itemBought, itemChecked);
     }
 
     const minusChangeHandler = () => {
@@ -39,6 +42,7 @@ export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, h
         }
         else {
             setItemBought(itemBought - 1);
+            //updateCartItemHandler(id, id_barang, itemBought, itemChecked);
         }
     }
    
@@ -49,7 +53,6 @@ export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, h
     useEffect(() => {
         firstRender.current ? firstRender.current = false : updateCartItemHandler(id, id_barang, itemBought, itemChecked);
     }, [itemBought, itemChecked])
-
 
     return (
         <Stack
@@ -118,7 +121,7 @@ export default function ChartItem({ id, id_barang, diskon, gambar, nama, stok, h
                 >
                     <Link
                         as={RouterLink}
-                        to={"/item/" + id_barang}
+                        to={"/item/" + id}
                     >
                         <Flex
                             align={"center"}

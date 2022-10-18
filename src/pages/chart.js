@@ -4,10 +4,12 @@ import ChartItem from "../components/chartItem/chartItem";
 import Loading from "../components/smallcomponent/loading/loading"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter"
 import { ChartContext } from "../components/context/chartContext";
+import { ItemContext } from "../components/context/itemsContext";
 
 
 export default function Chart() {
-    const { totalChartPrice, detailedItems, isCartItemMutationLoading } = useContext(ChartContext);
+    const { totalChartPrice, cartItems, isCartItemMutationLoading } = useContext(ChartContext);
+    const { items } = useContext(ItemContext);
 
     return (
         isCartItemMutationLoading ?
@@ -29,9 +31,13 @@ export default function Chart() {
                 </Flex>
 
                 {
-                    detailedItems?.length > 0 ? Array(detailedItems.length).fill(' ').map((_, i) => {
+                    cartItems?.length > 0 ? Array(cartItems.length).fill(' ').map((_, i) => {
+                        const item = items?.find((item)=>item.id === cartItems[i].id_barang);
                         return <ChartItem key={i}
-                            {...detailedItems[i].data}
+                            {...item} 
+                            jumlah = {cartItems[i].jumlah} 
+                            cartId = {cartItems[i].id} 
+                            checked = {cartItems[i].checked}
                         />
                     })
                         : ""

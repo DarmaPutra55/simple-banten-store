@@ -5,15 +5,12 @@ import Item from "../item/item";
 
 
 export default function ItemArea({ items }) {
-
-
-
-
     return (
         <>
 
 
             <Flex
+                className="responsiveWidth"
                 flexWrap={"wrap"}
                 justify={["baseline", "baseline", "center"]}
                 bgColor={"white"}

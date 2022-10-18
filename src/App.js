@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet";
 import FullscreeLoading from "./components/smallcomponent/fullscreenLoading/fullscreenLoading";
 import Profile from "./pages/profile";
 import SearchBar from "./components/searchbar/searchbar";
+import ItemContextProvider from "./components/context/itemsContext";
 
 const ItemDetail = React.lazy(() => import("./pages/itemDetail"))
 const MainSale = React.lazy(() => import("./pages/mainsale"));
@@ -31,27 +32,29 @@ function App() {
       </Helmet>
       <QueryClientProvider client={queryClient}>
         <UserContextProvider>
-          <ChartContextProvider>
-            <Flex
-              minH={"100vh"}
-              minW={"100%"}
-            >
-              <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
-                <SearchBar />
-                <React.Suspense fallback={<FullscreeLoading />}>
-                  <Routes>
-                    <Route path='*' element={<MainSale />} />
-                    <Route path='/' element={<MainSale />} />
-                    <Route path='/item/:itemID' element={<ItemDetail />} />
-                    <Route path='/chart' element={<Chart />} />
-                    <Route path='/register' element={<AuthRerouter><SignIn /></AuthRerouter>} />
-                    <Route path='/login' element={<AuthRerouter><SignIn /></AuthRerouter>} />
-                    <Route path='/profile' element={<Profile />} />
-                  </Routes>
-                </React.Suspense>
-              </Stack>
-            </Flex>
-          </ChartContextProvider>
+          <ItemContextProvider>
+            <ChartContextProvider>
+              <Flex
+                minH={"100vh"}
+                minW={"100%"}
+              >
+                <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
+                  <SearchBar />
+                  <React.Suspense fallback={<FullscreeLoading />}>
+                    <Routes>
+                      <Route path='*' element={<MainSale />} />
+                      <Route path='/' element={<MainSale />} />
+                      <Route path='/item/:itemID' element={<ItemDetail />} />
+                      <Route path='/chart' element={<Chart />} />
+                      <Route path='/register' element={<AuthRerouter><SignIn /></AuthRerouter>} />
+                      <Route path='/login' element={<AuthRerouter><SignIn /></AuthRerouter>} />
+                      <Route path='/profile' element={<Profile />} />
+                    </Routes>
+                  </React.Suspense>
+                </Stack>
+              </Flex>
+            </ChartContextProvider>
+          </ItemContextProvider>
         </UserContextProvider>
       </QueryClientProvider>
     </ChakraProvider>
