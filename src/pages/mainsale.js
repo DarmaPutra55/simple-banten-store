@@ -30,9 +30,6 @@ export default function MainSale() {
     });
 
     return (
-        <Stack minW={"100%"}>
-            <SearchBar />
-            {isItemsLoading ? <Loading /> : <ItemArea items={items} />}
-        </Stack>
+        isItemsLoading ? <Loading /> : <ItemArea items={items} />
     );
 }

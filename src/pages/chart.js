@@ -1,6 +1,5 @@
 import { Flex, Heading, Stack, Box, Text, Button, useBoolean } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
-import SearchBar from "../components/searchbar/searchbar";
+import { useContext } from "react";
 import ChartItem from "../components/chartItem/chartItem";
 import Loading from "../components/smallcomponent/loading/loading"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter"
@@ -8,15 +7,12 @@ import { ChartContext } from "../components/context/chartContext";
 
 
 export default function Chart() {
-    const { totalChartPrice, detailedItems } = useContext(ChartContext);
+    const { totalChartPrice, detailedItems, isCartItemMutationLoading } = useContext(ChartContext);
 
     return (
-        <Stack
-            bg={"gray.100"}
-            minW={"100%"}
-            align={"center"}
-        >
-            <SearchBar />
+        isCartItemMutationLoading ?
+            <Loading />
+            :
             <Stack className={"responsiveWidth"}>
                 <Flex
                     bgColor={"white"}
@@ -80,6 +76,6 @@ export default function Chart() {
                     </Flex>
                 </Flex>
             </Stack>
-        </Stack>
+
     );
 }

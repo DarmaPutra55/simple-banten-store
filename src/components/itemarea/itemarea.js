@@ -4,40 +4,41 @@ import CurrencyFormatter from "../smallcomponent/currencyFormatter/currencyForma
 import Item from "../item/item";
 
 
-export default function ItemArea({items}) {
+export default function ItemArea({ items }) {
 
-    
-    
+
+
 
     return (
         <>
 
 
-                    <Flex
-                        flexWrap={"wrap"}
-                        justify={["baseline", "baseline", "center"]}
-                    >
-                        {
-                            items?.length > 0 ?
-                            Array(items.length).fill('').map((_, i) => {
-                                return <Item
-                                    key={i}
-                                    id={items[i].id}
-                                    img={items[i].gambar}
-                                    name={items[i].nama}
-                                    price={items[i].diskon > 0 ? CurrencyFormatter((items[i].harga - (Math.round(items[i].harga * items[i].diskon) / 100))) : CurrencyFormatter(items[i].harga)}
-                                    originalPrice={CurrencyFormatter(items[i].harga)}
-                                    discount={items[i].diskon}
-                                    rating={items[i].rating.rate}
-                                    sold={items[i].sold}
-                                />;
-                            })
-                            :
-                            <Flex minWidth={"100%"} justify={"center"}>
-                                <Text>Tidak ada barang yang ditemukan</Text>
-                            </Flex>
-                        }
-                    </Flex>
+            <Flex
+                flexWrap={"wrap"}
+                justify={["baseline", "baseline", "center"]}
+                bgColor={"white"}
+            >
+                {
+                    items?.length > 0 ?
+                        Array(items.length).fill('').map((_, i) => {
+                            return <Item
+                                key={i}
+                                id={items[i].id}
+                                img={items[i].gambar}
+                                name={items[i].nama}
+                                price={items[i].diskon > 0 ? CurrencyFormatter((items[i].harga - (Math.round(items[i].harga * items[i].diskon) / 100))) : CurrencyFormatter(items[i].harga)}
+                                originalPrice={CurrencyFormatter(items[i].harga)}
+                                discount={items[i].diskon}
+                                rating={items[i].rating.rate}
+                                sold={items[i].sold}
+                            />;
+                        })
+                        :
+                        <Flex minWidth={"100%"} justify={"center"}>
+                            <Text>Tidak ada barang yang ditemukan</Text>
+                        </Flex>
+                }
+            </Flex>
 
         </>
     )

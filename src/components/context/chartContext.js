@@ -201,9 +201,16 @@ export default function ChartContextProvider({ children }) {
     }, [detailedItems])
 
     return (
-        <ChartContext.Provider value={{ detailedItems, totalChartPrice, removeItem, updateCartItemHandler, updateCartItemHandlerWithToast, cartAddItemHandler }}>
+        <ChartContext.Provider value={{
+            detailedItems, totalChartPrice, removeItem, updateCartItemHandler, updateCartItemHandlerWithToast, cartAddItemHandler, "isCartItemMutationLoading":
+                (cartAddItemMutation.isLoading ||
+                    cartItemUpdateMutation.isLoading ||
+                    cartRemoveItemMutation.isLoading ? true : false)
+        }}>
             {
-                detailedItemsFetchStatus || itemFetchStatus === 'fetching' ?
+                detailedItemsFetchStatus ||
+                    itemFetchStatus === 'fetching' ?
+
                     <FullscreeLoading />
                     :
                     children

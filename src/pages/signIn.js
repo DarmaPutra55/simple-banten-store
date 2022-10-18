@@ -29,30 +29,27 @@ export default function SignIn() {
         setEmail("");
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setAcessLink(location.pathname.includes("login") ? true : false);
         clearState();
     }, [location])
 
     return (
-        <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
-            <SearchBar />
-            <Stack gap={"0px"} bgColor={"white"} p={"25px"} w={'full'} className={"responsiveWidthSmaller"}>
-                <ButtonGroup spacing={"0px"}>
-                    <Button isActive={acessLink ? true : false} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
-                        navigation("/login")
-                    }}>Login</Button>
-                    <Button isActive={acessLink ? false : true} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
-                        navigation("/register")
-                    }}>Registrasi</Button>
-                </ButtonGroup>
-                {
-                    acessLink ?
-                        <LoginForm setUsername={setUsername} setPassword={setPassword} loginFormSubmitHandler={loginFormSubmitHandler} />
-                        :
-                        <RegisterForm setUsername={setUsername} setPassword={setPassword} setEmail={setEmail} registerFormSubmitHandler={registerFormSubmitHandler} />
-                }
-            </Stack>
+        <Stack gap={"0px"} bgColor={"white"} p={"25px"} w={'full'} className={"responsiveWidthSmaller"}>
+            <ButtonGroup spacing={"0px"}>
+                <Button isActive={acessLink ? true : false} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
+                    navigation("/login")
+                }}>Login</Button>
+                <Button isActive={acessLink ? false : true} flexGrow={"1"} borderRadius={"0px"} onClick={(e) => {
+                    navigation("/register")
+                }}>Registrasi</Button>
+            </ButtonGroup>
+            {
+                acessLink ?
+                    <LoginForm setUsername={setUsername} setPassword={setPassword} loginFormSubmitHandler={loginFormSubmitHandler} />
+                    :
+                    <RegisterForm setUsername={setUsername} setPassword={setPassword} setEmail={setEmail} registerFormSubmitHandler={registerFormSubmitHandler} />
+            }
         </Stack>
     )
 }

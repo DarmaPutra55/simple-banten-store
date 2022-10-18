@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { ChakraProvider, Flex } from '@chakra-ui/react'
+import { ChakraProvider, Flex, Stack } from '@chakra-ui/react'
 import { Route, Routes } from "react-router-dom";
 import ChartContextProvider from "./components/context/chartContext";
 import UserContextProvider from "./components/context/userContext";
@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./style/chakra-util.css";
 import { Helmet } from "react-helmet";
 import FullscreeLoading from "./components/smallcomponent/fullscreenLoading/fullscreenLoading";
+import Profile from "./pages/profile";
+import SearchBar from "./components/searchbar/searchbar";
 
 const ItemDetail = React.lazy(() => import("./pages/itemDetail"))
 const MainSale = React.lazy(() => import("./pages/mainsale"));
@@ -34,16 +36,20 @@ function App() {
               minH={"100vh"}
               minW={"100%"}
             >
-              <React.Suspense fallback={<FullscreeLoading />}>
-                <Routes>
-                  <Route path='*' element={<MainSale />} />
-                  <Route path='/' element={<MainSale />} />
-                  <Route path='/item/:itemID' element={<ItemDetail />} />
-                  <Route path='/chart' element={<Chart />} />
-                  <Route path='/register' element={<AuthRerouter><SignIn /></AuthRerouter>} />
-                  <Route path='/login' element={<AuthRerouter><SignIn /></AuthRerouter>} />
-                </Routes>
-              </React.Suspense>
+              <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
+                <SearchBar />
+                <React.Suspense fallback={<FullscreeLoading />}>
+                  <Routes>
+                    <Route path='*' element={<MainSale />} />
+                    <Route path='/' element={<MainSale />} />
+                    <Route path='/item/:itemID' element={<ItemDetail />} />
+                    <Route path='/chart' element={<Chart />} />
+                    <Route path='/register' element={<AuthRerouter><SignIn /></AuthRerouter>} />
+                    <Route path='/login' element={<AuthRerouter><SignIn /></AuthRerouter>} />
+                    <Route path='/profile' element={<Profile />} />
+                  </Routes>
+                </React.Suspense>
+              </Stack>
             </Flex>
           </ChartContextProvider>
         </UserContextProvider>

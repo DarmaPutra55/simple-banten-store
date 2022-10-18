@@ -12,8 +12,6 @@ export default function Item(props){
                 flex={"1 1"}
                 flexBasis={["47.5%", "47.5%", "350px"]}
                 maxW={["47.5%", "47.5%", "350px"]}
-                border={"1px"} 
-                borderColor={"gray.100"}
             >
                 <Link 
                     as={ReactLink} 
