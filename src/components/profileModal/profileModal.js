@@ -40,19 +40,19 @@ export default function ProfileModal({ topPos, isOpen, onClose }) {
                 <Stack w={"full"}>
                     {user?.id ?
                         <>
-                            <Link as={ReactLink} to="/" _hover={{}} fontSize={"1.2em"}>
+                            <Link as={ReactLink} to="/profile" _hover={{}} fontSize={"1.2em"} onClick={onClose}>
                                 My Profile
                             </Link>
                             <PlainButtonLink text={"Logout"} onClick={logout}/>
                         </>
                         :
                         <>
-                            <Link as={ReactLink} to="/login" _hover={{}} fontSize={"1.2em"}>
+                            <Link as={ReactLink} to="/login" _hover={{}} fontSize={"1.2em"} onClick={onClose}>
 
                                 Login
 
                             </Link>
-                            <Link as={ReactLink} to="/register" _hover={{}} fontSize={"1.2em"}>
+                            <Link as={ReactLink} to="/register" _hover={{}} fontSize={"1.2em"} onClick={onClose}>
 
                                 Register
 

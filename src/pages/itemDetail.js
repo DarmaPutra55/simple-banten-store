@@ -1,6 +1,6 @@
-import { Stack, Text, Flex, Button, HStack } from "@chakra-ui/react";
+import { Stack, Text, Flex, Button, HStack, BreadcrumbLink, BreadcrumbItem } from "@chakra-ui/react";
 import { useDisclosure } from '@chakra-ui/react'
-import { useParams } from "react-router-dom";
+import { useParams, Link as ReactLink } from "react-router-dom";
 import { MessageSquare } from "react-feather"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
 import Loading from "../components/smallcomponent/loading/loading";
@@ -13,13 +13,14 @@ import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { ChartContext } from "../components/context/chartContext";
+import ResponsiveBreadcrumb from "../components/smallcomponent/responsiveBreadcrumb/responsiveBreadcrumb";
 
 export default function ItemDetail() {
     const params = useParams();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isCartItemMutationLoading } = useContext(ChartContext);
     const { data: item, isLoading: isItemLoading } = useQuery(['item'], async () => {
-        return await fetchApi("/products/"+params.itemID)
+        return await fetchApi("/products/" + params.itemID)
     }, {
         retry: false,
     });
@@ -31,13 +32,52 @@ export default function ItemDetail() {
                 <Loading />
                 :
                 !item?.id ?
-                    <Flex justify={"center"} align={"center"}>
-                        <Text>
-                            Barang tidak ditemukan!
-                        </Text>
-                    </Flex>
+                    <>
+                        <ResponsiveBreadcrumb>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink
+                                    as={ReactLink}
+                                    to="/"
+                                >
+                                    Home
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink
+                                    as={ReactLink}
+                                    to="#"
+                                >
+                                    ???
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                        </ResponsiveBreadcrumb>
+
+                        <Flex justify={"center"} align={"center"}>
+                            <Text>
+                                Barang tidak ditemukan!
+                            </Text>
+                        </Flex>
+                    </>
                     :
                     <>
+                        <ResponsiveBreadcrumb>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink
+                                    as={ReactLink}
+                                    to="/"
+                                >
+                                    Home
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink
+                                    as={ReactLink}
+                                    to="#"
+                                >
+                                    {item.nama}
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                        </ResponsiveBreadcrumb>
                         <Stack
                             className={"responsiveWidth"}
                             spacing={"18px"}

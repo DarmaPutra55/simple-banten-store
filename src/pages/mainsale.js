@@ -1,12 +1,9 @@
-import SearchBar from "../components/searchbar/searchbar";
-import ItemArea from "../components/itemarea/itemarea";
-import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
-import Loading from "../components/smallcomponent/loading/loading";
-import { useQuery } from "@tanstack/react-query";
-import { Stack } from "@chakra-ui/react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+import { useLocation, useSearchParams, Link as ReactLink } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { ItemContext } from "../components/context/itemsContext";
+import ItemArea from "../components/itemarea/itemarea";
+import ResponsiveBreadcrumb from "../components/smallcomponent/responsiveBreadcrumb/responsiveBreadcrumb";
 
 export default function MainSale() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +12,10 @@ export default function MainSale() {
     const location = useLocation();
 
     useEffect(() => {
-        setViewedItem(items.filter((item)=>{
+        setViewedItem(items.filter((item) => {
             const isKategoriMatch = item.kategori.toLowerCase().includes(searchParams.has("kategori") ? searchParams.get("kategori") : "");
             const isNamaIncluded = item.nama.toLowerCase().includes(searchParams.has("nama") ? searchParams.get("nama") : "");
-            if(isNamaIncluded && isKategoriMatch) return item;
+            if (isNamaIncluded && isKategoriMatch) return item;
         }));
     }, [location])
 
@@ -43,6 +40,18 @@ export default function MainSale() {
     });
     */
     return (
-        <ItemArea items={viewedItem} />
+        <>
+            <ResponsiveBreadcrumb>
+                <BreadcrumbItem>
+                    <BreadcrumbLink
+                        as={ReactLink}
+                        to="/"
+                    >
+                        Home
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+            </ResponsiveBreadcrumb>
+            <ItemArea items={viewedItem} />
+        </>
     );
 }

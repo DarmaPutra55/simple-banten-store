@@ -14,6 +14,7 @@ export default function ItemArea({ items }) {
                 flexWrap={"wrap"}
                 justify={["baseline", "baseline", "center"]}
                 bgColor={"white"}
+                height={"100%"}
             >
                 {
                     items?.length > 0 ?
@@ -27,7 +28,7 @@ export default function ItemArea({ items }) {
                                 originalPrice={CurrencyFormatter(items[i].harga)}
                                 discount={items[i].diskon}
                                 rating={items[i].rating.rate}
-                                sold={items[i].sold}
+                                sold={items[i].terjual}
                             />;
                         })
                         :

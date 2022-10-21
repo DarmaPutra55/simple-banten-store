@@ -36,8 +36,12 @@ export default function ItemDetailHeader(props) {
                 w={"100%"}
                 h={"100%"}
                 src={props.img}
+                alignSelf={"center"}
             />
             <Stack p={"2"} spacing={"4px"} maxH={"fit-content"}>
+                <Heading size={"md"}>
+                    {props.name}
+                </Heading>
                 <Box>
                     <Text fontWeight={"semibold"}>{props.price}</Text>
                     {props.discount ?
@@ -57,9 +61,6 @@ export default function ItemDetailHeader(props) {
                     }
 
                 </Box>
-                <Heading size={"md"}>
-                    {props.name}
-                </Heading>
                 <Flex justify={"space-between"}>
                     <Stack direction={"row"} alignItems={"center"}>
                         <Stack direction={"row"} py={"1"} spacing={"0.5"} height={"fit-content"}>

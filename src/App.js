@@ -11,6 +11,7 @@ import FullscreeLoading from "./components/smallcomponent/fullscreenLoading/full
 import Profile from "./pages/profile";
 import SearchBar from "./components/searchbar/searchbar";
 import ItemContextProvider from "./components/context/itemsContext";
+import Discussion from "./pages/discussion";
 
 const ItemDetail = React.lazy(() => import("./pages/itemDetail"))
 const MainSale = React.lazy(() => import("./pages/mainsale"));
@@ -45,10 +46,12 @@ function App() {
                       <Route path='*' element={<MainSale />} />
                       <Route path='/' element={<MainSale />} />
                       <Route path='/item/:itemID' element={<ItemDetail />} />
+                      <Route path='/discussion' /* Change later into /item/:itemID/discussion */ element={<Discussion />} /> 
                       <Route path='/chart' element={<Chart />} />
                       <Route path='/register' element={<AuthRerouter><SignIn /></AuthRerouter>} />
                       <Route path='/login' element={<AuthRerouter><SignIn /></AuthRerouter>} />
                       <Route path='/profile' element={<Profile />} />
+                      
                     </Routes>
                   </React.Suspense>
                 </Stack>
