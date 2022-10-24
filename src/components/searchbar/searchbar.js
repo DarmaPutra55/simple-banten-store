@@ -8,42 +8,43 @@ import {
 
 import ActionIcon from '../smallcomponent/icons/icon';
 //import { useEffect, useState } from "react";
+import { UserContext } from '../context/userContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { ShoppingCart, Search } from "react-feather";
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useSearchParams, Link as ReactLink } from 'react-router-dom';
+import { useSearchParams, Link as ReactLink, useNavigate } from 'react-router-dom';
 import { ChartContext } from '../context/chartContext';
-import SearchbarModal from './searchbarModal';
-import SearcbarInput from './searchbarInput';
+import SearchInput from '../search/searchInput';
 import ProfileModal from '../profileModal/profileModal';
 import ProfileDrawer from '../profileDrawer/profileDrawer';
-import { UserContext } from '../context/userContext';
 
 export default function SearchBar() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isProfileDrawerOpen, onOpen: onProfileDrawerOpen, onClose: onProfileDrawerClose } = useDisclosure();
     const { isOpen: isProfileModalOpen, onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure();
     const [searchParams] = useSearchParams();
     const [searchText, setSearchText] = useState("" || searchParams.get("nama"));
     const { cartItems } = useContext(ChartContext);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const iconRef = useRef();
     const cartCheckedItemCount = cartItems?.length > 0 ? cartItems.filter((cartItem) => cartItem.checked).length : 0;
 
-    const handleRezise = () =>{
+    const handleRezise = () => {
         const windowInnerWidth = window.innerWidth;
-        if(isProfileDrawerOpen && windowInnerWidth > 800){
+        if (isProfileDrawerOpen && windowInnerWidth > 800) {
             onProfileDrawerClose();
             onProfileModalOpen();
         }
-        else if(isProfileModalOpen && windowInnerWidth < 800){
+        else if (isProfileModalOpen && windowInnerWidth < 800) {
             onProfileModalClose();
             onProfileDrawerOpen();
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         window.addEventListener('resize', handleRezise);
-        return ()=>{
+        return () => {
             window.removeEventListener('resize', handleRezise);
         }
     }, [isProfileDrawerOpen, isProfileModalOpen])
@@ -88,26 +89,19 @@ export default function SearchBar() {
                             </Text>
                         </Flex>
                     </Link>
-                    <Flex
-                        display={["flex", "flex", "none"]}
-                    >
-                        <ActionIcon
-                            label={"Search"}
-                            icon={<Search size={"2em"} />}
-                            onClick={onOpen}
-                        />
-                    </Flex>
-                    <Flex
-                        display={["none", "none", "flex"]}
-                        width={"70%"}
-                        px={"2em"}
-                        align={"center"}
-                    >
-                        <SearcbarInput
-                            value={searchText || ""}
-                            onClick={onOpen}
-                        />
-                    </Flex>
+
+                    <SearchInput
+                        value={searchText || ""}
+                        setSearchText={setSearchText}
+                        formSubmitHandler={
+                            (e) => {
+                                e.preventDefault();
+                                queryClient.resetQueries(['items']);
+                                navigate(searchText ? "/?nama=" + searchText : "/", { replace: true })
+                            }
+                        }
+                    />
+
                     <Link
                         as={ReactLink}
                         to={"/chart"}
@@ -142,7 +136,7 @@ export default function SearchBar() {
                             </Flex>
                         </Flex>
                     </Link>
-                    <Flex 
+                    <Flex
                         align={"center"}
                         position={"relative"}
                     >
@@ -164,15 +158,9 @@ export default function SearchBar() {
                     </Flex>
                 </Flex>
             </Flex>
-            <ProfileDrawer 
+            <ProfileDrawer
                 isOpen={isProfileDrawerOpen}
                 onClose={onProfileDrawerClose}
-            />
-            <SearchbarModal
-                searchText={searchText}
-                setSearchText={setSearchText}
-                isOpen={isOpen}
-                onClose={onClose}
             />
         </>
     );
