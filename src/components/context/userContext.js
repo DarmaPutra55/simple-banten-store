@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { useMutation, useQuery, useQueryClient, QueryCache } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
-import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
+import { FullscreeLoading } from "../smallcomponent/loading/loading";
 import { useToast } from "@chakra-ui/react";
 
 

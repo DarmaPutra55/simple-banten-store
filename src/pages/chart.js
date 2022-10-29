@@ -1,22 +1,27 @@
 import { Flex, Heading, Stack, Box, Text, Button, BreadcrumbLink, BreadcrumbItem } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChartContext } from "../components/context/chartContext";
 import { ItemContext } from "../components/context/itemsContext";
 import { Link as ReactLink } from "react-router-dom";
 import ChartItem from "../components/chartItem/chartItem";
-import Loading from "../components/smallcomponent/loading/loading"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter"
 import ResponsiveBreadcrumb from "../components/smallcomponent/responsiveBreadcrumb/responsiveBreadcrumb";
 
 
 export default function Chart() {
-    const { totalChartPrice, cartItems, isCartItemMutationLoading } = useContext(ChartContext);
+    const [mutatedCartItemIds, setmutatedCartItemIds] = useState([]);
+    const { totalChartPrice, cartItems } = useContext(ChartContext);
     const { items } = useContext(ItemContext);
 
+    const addMutatedCartItemHandler = (mutatedCartItemId) => {
+        setmutatedCartItemIds((mutatedCartItemIds)=>[...mutatedCartItemIds, mutatedCartItemId]);
+    }
+
+    const removeMutatedCartItemHandler = (mutatedCartItemId) => {
+        setmutatedCartItemIds((mutatedCartItemIds)=>mutatedCartItemIds.filter((itemId)=>itemId !== mutatedCartItemId))
+    }
+
     return (
-        isCartItemMutationLoading ?
-            <Loading />
-            :
             <>
                 <ResponsiveBreadcrumb>
                     <BreadcrumbItem>
@@ -60,6 +65,9 @@ export default function Chart() {
                                 jumlah={cartItems[i].jumlah}
                                 cartId={cartItems[i].id}
                                 checked={cartItems[i].checked}
+                                isItemMutating={mutatedCartItemIds?.includes(cartItems[i].id) ? true : false}
+                                addMutatedCartItemHandler={addMutatedCartItemHandler}
+                                removeMutatedCartItemHandler={removeMutatedCartItemHandler}
                             />
                         })
                             : ""

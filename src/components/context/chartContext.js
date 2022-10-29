@@ -2,7 +2,7 @@ import { useContext, createContext, useEffect, useState } from "react";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserContext } from "./userContext"
 import fetchApi from "../smallcomponent/fetchApi/fetchApi";
-import FullscreeLoading from "../smallcomponent/fullscreenLoading/fullscreenLoading";
+import { FullscreeLoading } from "../smallcomponent/loading/loading";
 import { useToast } from "@chakra-ui/react";
 import { ItemContext } from "./itemsContext";
 
@@ -25,6 +25,9 @@ export default function ChartContextProvider({ children }) {
     }, {
         enabled: user?.cartId ? true : false,
         retry: false,
+        onSuccess: (data)=>{
+            updateTotalPrice(data)
+        }
     });
 
     /*const { data: detailedItems, fetchStatus: detailedItemsFetchStatus } = useQuery(["fetchedItemDetail"], async () => {
@@ -73,7 +76,7 @@ export default function ChartContextProvider({ children }) {
             });
     }, {
         onSuccess: () => {
-            queryClient.invalidateQueries("fetchCart");
+            queryClient.invalidateQueries(["fetchCart"]);
         }
     })
 
@@ -92,8 +95,20 @@ export default function ChartContextProvider({ children }) {
             })
         });
     }, {
-        onSuccess: () => {
-            queryClient.invalidateQueries("fetchCart");
+        onSuccess: (data) => {
+            const query = queryClient.getQueryData(["fetchCart"]);
+            const oldCartItems = query.table_cart_barang;
+            const newCartItems = oldCartItems.length > 0 ? oldCartItems.map((cartItem)=>{
+                if(cartItem.id === data.id){
+                    cartItem.jumlah = data.jumlah;
+                    cartItem.checked = data.checked;
+                }
+                return cartItem;
+            }) : oldCartItems;
+
+            query.table_cart_barang = newCartItems;
+            queryClient.setQueryData(["fetchCart"], query);
+            updateTotalPrice(cart);
         }
     })
 
@@ -112,7 +127,7 @@ export default function ChartContextProvider({ children }) {
         })
     }, {
         onSuccess: () => {
-            queryClient.invalidateQueries("fetchCart");
+            queryClient.invalidateQueries(["fetchCart"]);
         }
     })
 
@@ -191,7 +206,7 @@ export default function ChartContextProvider({ children }) {
         })
     }
 
-    useEffect(() => {
+    const updateTotalPrice = (cart) =>{
         setTotalChartPrice(() => {
             const cartItems = cart?.table_cart_barang;
             if (!cartItems || cartItems?.length < 1) return 0;
@@ -206,14 +221,13 @@ export default function ChartContextProvider({ children }) {
                 }
             }, 0)
         })
-    }, [cart]);
+    }
 
     return (
         <ChartContext.Provider value={{
             "cartItems": cart?.table_cart_barang, totalChartPrice, removeItem, updateCartItemHandler, updateCartItemHandlerWithToast, cartAddItemHandler, "isCartItemMutationLoading":
                 (cartAddItemMutation.isLoading ||
-                    cartItemUpdateMutation.isLoading ||
-                    cartRemoveItemMutation.isLoading ? true : false)
+                cartRemoveItemMutation.isLoading ? true : false)
         }}>
             {
                 cartFetchStatus === 'fetching' ?

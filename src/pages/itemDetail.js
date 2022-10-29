@@ -3,7 +3,7 @@ import { useDisclosure } from '@chakra-ui/react'
 import { useParams, Link as ReactLink } from "react-router-dom";
 import { MessageSquare } from "react-feather"
 import CurrencyFormatter from "../components/smallcomponent/currencyFormatter/currencyFormatter";
-import Loading from "../components/smallcomponent/loading/loading";
+import { Loading } from "../components/smallcomponent/loading/loading";
 import ItemDetailHeader from "../components/itemDetail/itemDetailHeader/itemDetailHeader";
 import ItemDetailInformation from "../components/itemDetail/itemDetailInformation/itemDetailInformation";
 import ItemMoreLikeThis from "../components/itemMoreLikeThis/itemMoreLikeThis";
@@ -11,14 +11,11 @@ import ActionIcon from "../components/smallcomponent/icons/icon";
 import BuyModal from "../components/buyModal/buyModal";
 import fetchApi from "../components/smallcomponent/fetchApi/fetchApi";
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
-import { ChartContext } from "../components/context/chartContext";
 import ResponsiveBreadcrumb from "../components/smallcomponent/responsiveBreadcrumb/responsiveBreadcrumb";
 
 export default function ItemDetail() {
     const params = useParams();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { isCartItemMutationLoading } = useContext(ChartContext);
     const { data: item, isLoading: isItemLoading } = useQuery(['item'], async () => {
         return await fetchApi("/products/" + params.itemID)
     }, {
@@ -28,7 +25,7 @@ export default function ItemDetail() {
 
     return (
         <>
-            {isItemLoading || isCartItemMutationLoading ?
+            {isItemLoading  ?
                 <Loading />
                 :
                 !item?.id ?

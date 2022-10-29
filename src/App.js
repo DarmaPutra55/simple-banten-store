@@ -7,7 +7,7 @@ import AuthRerouter from "./components/smallcomponent/authRerouter/authRerouter"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./style/chakra-util.css";
 import { Helmet } from "react-helmet";
-import FullscreeLoading from "./components/smallcomponent/fullscreenLoading/fullscreenLoading";
+import { FullscreeLoading } from "./components/smallcomponent/loading/loading";
 import Profile from "./pages/profile";
 import SearchBar from "./components/searchbar/searchbar";
 import ItemContextProvider from "./components/context/itemsContext";
@@ -41,7 +41,7 @@ function App() {
               >
                 <Stack bgColor={"gray.100"} align={"center"} minW={"100%"}>
                   <SearchBar />
-                  <React.Suspense fallback={<FullscreeLoading />}>
+                  <Suspense fallback={<FullscreeLoading />}>
                     <Routes>
                       <Route path='*' element={<MainSale />} />
                       <Route path='/' element={<MainSale />} />
@@ -53,7 +53,7 @@ function App() {
                       <Route path='/profile' element={<Profile />} />
                       
                     </Routes>
-                  </React.Suspense>
+                  </Suspense>
                 </Stack>
               </Flex>
             </ChartContextProvider>

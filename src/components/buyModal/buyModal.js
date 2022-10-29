@@ -20,8 +20,10 @@ import CurrencyFormatter from '../smallcomponent/currencyFormatter/currencyForma
 import { ChartContext } from '../context/chartContext'
 import { useContext, useRef } from 'react';
 import AlertDialog from '../alertDialog/alertDialog';
+import { Loading } from '../smallcomponent/loading/loading';
 
 export default function BuyModal({ productId, productImg, productName, productDiscount, productPrice, productStok, isOpen, onClose }) {
+  const { isCartItemMutationLoading } = useContext(ChartContext);
   const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure();
   const { cartItems, cartAddItemHandler, updateCartItemHandlerWithToast } = useContext(ChartContext);
   const thisItemInCart = cartItems?.find((item) => item.id_barang === productId);
@@ -70,26 +72,30 @@ export default function BuyModal({ productId, productImg, productName, productDi
           <ModalHeader textAlign={"center"}>Tambah ke keranjang?</ModalHeader>
           <ModalCloseButton ref={closeButtonRef} />
           <ModalBody>
-            <Flex
-              direction={"row"}
-            >
-              <Box maxW={"50%"}>
-                <Image
-                  className="ratioSame"
-                  fit={"contain"}
-                  src={productImg}
-                  alt={productName}
-                />
-              </Box>
-              <Flex w={"100%"} maxW={"50%"} minH={"100%"} justify={"center"}>
-                <Stack spacing={"14px"}>
-                  <Text fontSize={"large"}>{productName}</Text>
-                  <Text fontSize={"large"}>  {CurrencyFormatter((productPrice - (Math.round(productPrice * productDiscount) / 100)) * itemQuantity)} </Text>
-                  <ItemQuantitiyManager itemQuantity={itemQuantity} inputChangeHandler={inputChangeHandler} plusChangeHandler={plusChangeHandler} minusChangeHandler={minusChangeHandler} />
-                  <Text fontSize={"sm"} color={"red.400"}>  Stok tinggal {productStok} </Text>
-                </Stack>
+            {isCartItemMutationLoading ?
+              <Loading />
+              :
+              <Flex
+                direction={"row"}
+              >
+                <Box maxW={"50%"}>
+                  <Image
+                    className="ratioSame"
+                    fit={"contain"}
+                    src={productImg}
+                    alt={productName}
+                  />
+                </Box>
+                <Flex w={"100%"} maxW={"50%"} minH={"100%"} justify={"center"}>
+                  <Stack spacing={"14px"}>
+                    <Text fontSize={"large"}>{productName}</Text>
+                    <Text fontSize={"large"}>  {CurrencyFormatter((productPrice - (Math.round(productPrice * productDiscount) / 100)) * itemQuantity)} </Text>
+                    <ItemQuantitiyManager itemQuantity={itemQuantity} inputChangeHandler={inputChangeHandler} plusChangeHandler={plusChangeHandler} minusChangeHandler={minusChangeHandler} />
+                    <Text fontSize={"sm"} color={"red.400"}>  Stok tinggal {productStok} </Text>
+                  </Stack>
+                </Flex>
               </Flex>
-            </Flex>
+            }
           </ModalBody>
 
           <ModalFooter>
